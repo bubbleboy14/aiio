@@ -13,7 +13,10 @@ setup(
     ],
     zip_safe = False,
     install_requires = [
-        "ct >= 0.8.8.2"
+        "ct >= 0.8.8.2",
+        "wikipedia >= 1.4.0",
+        "nltk >= 3.2.1",
+        "pocketsphinx >= 0.1.3"
     ],
     classifiers = [
         'Development Status :: 3 - Alpha',

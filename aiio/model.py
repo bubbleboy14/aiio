@@ -1,4 +1,4 @@
-import random
+import os, random
 from cantools import db
 from cantools.util import read
 
@@ -45,13 +45,26 @@ NEGS = {
 	"gerund": "not"
 }
 IPP = {}
-for line in read("iverbs.txt").split("\n"):
-	if line:
-		v, p, pp = line.split("\t")
-		IPP[v] = IPP[p] = IPP[pp] = {
-			"past": p,
-			"participle": pp
-		}
+
+# load irregular verbs -- try via module and locally
+irrdata = None
+try:
+    import aiio # regular run (via package)
+    irrdata = read(os.path.join(aiio.__file__.rsplit("/", 1)[0], "iverbs.txt")).split("\n")
+except Exception, e:
+    try: # local run (via direct model import)
+        irrdata = read("iverbs.txt").split("\n")
+    except Exception, e: # module installation -- chill
+        print "can't import -- that's ok! (we're probably installing)"
+
+if irrdata:
+    for line in irrdata:
+    	if line:
+    		v, p, pp = line.split("\t")
+    		IPP[v] = IPP[p] = IPP[pp] = {
+    			"past": p,
+    			"participle": pp
+    		}
 
 class Symbol(db.TimeStampedBase):
     def meanings(self, count=False):

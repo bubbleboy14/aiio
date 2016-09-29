@@ -4,6 +4,12 @@ from cantools.util import log, error
 from model import *
 from util import randphrase
 
+def load_corpora():
+	for item in ["maxent_ne_chunker", "words", "averaged_perceptron_tagger", "punkt"]:
+		nltk.download(item)
+
+load_corpora()
+
 def learn(word, deep=False):
 	w = Word.query(Word.word == word).get()
 	if w:

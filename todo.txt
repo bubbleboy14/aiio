@@ -1,0 +1,22 @@
+pypi
+aiio.install()
+ctai
+ - incorporates aiio.model
+ - ties into ws pubsub bots
+ - ctmgc takes it from there
+
+chris-style backrefs
+ - topic extraction
+ - reference history
+fix ear
+ - untape mic?
+ - js api (goog?)?
+complex clause comprehension
+answer
+ - why -- check Reason then ask?
+ - where -- cantools geo!!!
+ - when -- ask? (yahoo answers api? seems broken. something else?)
+ - duckduckgo api???
+ingestion -> relations
+  - use this technique to process data (from wikipedia etc)
+identity affinities

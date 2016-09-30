@@ -1,4 +1,4 @@
-arise	arose	arisen
+IV = """arise	arose	arisen
 babysit	babysat	babysat
 be	was	been
 beat	beat	beaten
@@ -109,4 +109,4 @@ wake	woke	woken
 wear	wore	worn
 win	won	won
 withdraw	withdrew	withdrawn
-write	wrote	written
+write	wrote	written"""

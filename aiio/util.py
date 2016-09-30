@@ -40,7 +40,9 @@ phrases = {
 	"disagree": [
 		"i don't think you're right.",
 		"you're wrong!",
-		"not exactly..."
+		"not exactly...",
+		"don't say that.",
+		"i don't want to hear it!"
 	]
 }
 

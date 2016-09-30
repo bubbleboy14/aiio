@@ -12,12 +12,19 @@ from speak import say
 [('i', 'NN'), ('am', 'VBP'), ('mario', 'NN')]
 """
 
+MOODS = {
+	"all": ["inquire", "rephrase", "support", "refute"],
+	"happy": ["support"],
+	"grumpy": ["refute"],
+	"inquisitive": ["inquire", "rephrase"]
+}
+
 class Brain(object):
-	def __init__(self, name, ear=False, retorts=True):
+	def __init__(self, name, mood="all", ear=False, retorts=True):
 		self.name = name
 		self.identity = identify(name)
 		self.examiner = None
-		say("who are you?")
+		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
 		if ear:
 			self.ear = listen(self)
@@ -121,7 +128,7 @@ class Brain(object):
 		return random.choice(q.answers).get().content()
 
 	def retort(self, sentence):
-		retz = retorts.keys()
+		retz = MOODS[self.mood]
 		random.shuffle(retz)
 		for r in retz:
 			v = retorts[r](sentence)

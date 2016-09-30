@@ -1,10 +1,4 @@
-pypi
-aiio.install()
-ctai
- - incorporates aiio.model
- - ties into ws pubsub bots
- - ctmgc takes it from there
-
+shorter answers!
 chris-style backrefs
  - topic extraction
  - reference history

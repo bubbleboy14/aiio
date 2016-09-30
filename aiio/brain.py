@@ -13,18 +13,19 @@ from speak import say
 """
 
 class Brain(object):
-	def __init__(self, name, ear=False):
+	def __init__(self, name, ear=False, retorts=True):
 		self.name = name
 		self.identity = identify(name)
 		self.examiner = None
 		say("who are you?")
+		self.retorts = retorts
 		if ear:
 			self.ear = listen(self)
 
 	def __call__(self, sentence):
 		tagged = tag(sentence)
 		if tagged[0][1] == "WP":
-			say(self.answer(sentence))
+			return say(self.answer(sentence))
 		elif sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			if "you" in subject:
@@ -37,51 +38,53 @@ class Brain(object):
 			if content == person.name:
 				content = learn(subject, True).meaning()
 			if content:
-				say(content)
+				return say(content)
 			else:
-				say(randphrase("exhausted"))
+				return say(randphrase("exhausted"))
 		else:
 			self.ingest(sentence)
-			say(self.retort(sentence))
+			if self.retorts:
+				return say(self.retort(sentence))
 
 	def ingest(self, sentence):
 		# glean information, populate topics{} and history[]
 		tagged = tag(sentence)
-		if tagged[0][0] == "i" and tagged[1][0] == "am":
-			desc = sentence[5:]
-			if not self.examiner:
-				self.examiner = identify(nextNoun(tagged[2:]))
-			elif not self.examiner.summary:
-				self.examiner.summary = desc
-			else:
-				self.examiner.description = "%s %s"%(self.examiner.description, desc)
-			self.examiner.qualifiers.append(phrase(desc).key)
-			self.examiner.put()
-			q = question("who am i?")
-			q.answers.append(self.examiner.key)
-			q.put()
-			say("hello %s"%(self.examiner.name,))
-			# what's going on here? no qualifiers???
-			if self.examiner.qualifiers: # should ALWAYS be qualifiers :-\
-				qual = random.choice(self.examiner.qualifiers).get().content()
-				qper = []
-				for (qword, qpos) in tag(qual):
-					if qpos == "PRP":
-						qword = "you"
-					elif qpos == "PRP$":
-						qword = "your"
-					qper.append(qword)
-				say(" ".join(qper))
-		elif "because" in sentence:
-			event, reason = sentence.split(" because ")
-			Reason(person=self.examiner and self.examiner.key, name=event, reason=phrase(reason)).put()
-			say("ok, so %s because %s?"%(event, reason))
-		elif tagged[0][1].startswith("NN"):
-			if tagged[1][0] in ["is", "are"]: # learn it!
-				meaning(tagged[0][0], " ".join([w for (w, p) in tagged[2:]]))
-				say(randphrase("noted"))
-			else:
-				pass # handle other verbs!!
+		if len(tagged) > 1:
+			if tagged[0][0] == "i" and tagged[1][0] == "am":
+				desc = sentence[5:]
+				if not self.examiner:
+					self.examiner = identify(nextNoun(tagged[2:]))
+				elif not self.examiner.summary:
+					self.examiner.summary = desc
+				else:
+					self.examiner.description = "%s %s"%(self.examiner.description, desc)
+				self.examiner.qualifiers.append(phrase(desc).key)
+				self.examiner.put()
+				q = question("who am i?")
+				q.answers.append(self.examiner.key)
+				q.put()
+				say("hello %s"%(self.examiner.name,))
+				# what's going on here? no qualifiers???
+				if self.examiner.qualifiers: # should ALWAYS be qualifiers :-\
+					qual = random.choice(self.examiner.qualifiers).get().content()
+					qper = []
+					for (qword, qpos) in tag(qual):
+						if qpos == "PRP":
+							qword = "you"
+						elif qpos == "PRP$":
+							qword = "your"
+						qper.append(qword)
+					say(" ".join(qper))
+			elif "because" in sentence:
+				event, reason = sentence.split(" because ")
+				Reason(person=self.examiner and self.examiner.key, name=event, reason=phrase(reason)).put()
+				say("ok, so %s because %s?"%(event, reason))
+			elif tagged[0][1].startswith("NN"):
+				if tagged[1][0] in ["is", "are"]: # learn it!
+					meaning(tagged[0][0], " ".join([w for (w, p) in tagged[2:]]))
+					say(randphrase("noted"))
+				else:
+					pass # handle other verbs!!
 
 	def clarify(self, sentence):
 		return randphrase("what")

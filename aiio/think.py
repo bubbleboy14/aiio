@@ -74,11 +74,15 @@ def wsum(name):
 		return wikipedia.summary(name)
 	except wikipedia.DisambiguationError, e:
 		return wikipedia.summary(str(e).split("\n")[1])
+	except Exception, e:
+		return None
 
 def research(person):
-	person.description = wsum(person.name)
-	person.summary = person.description.split("\n")[0]
-	person.qualifiers = [phrase(p).key for p in person.summary.split(". ")]
+	summary = wsum(person.name)
+	if summary:
+		person.description = summary
+		person.summary = person.description.split("\n")[0]
+		person.qualifiers = [phrase(p).key for p in person.summary.split(". ")]
 
 def identify(name):
 	person = Person.query(Person.name == name).get()

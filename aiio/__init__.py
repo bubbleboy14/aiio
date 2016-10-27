@@ -5,4 +5,4 @@ import think
 import util
 import hear
 import speak
-from brain import Brain
+from brain import Brain, getBrain

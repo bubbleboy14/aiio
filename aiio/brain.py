@@ -20,12 +20,13 @@ MOODS = {
 }
 
 class Brain(object):
-	def __init__(self, name, mood="all", ear=False, retorts=True):
+	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False):
 		self.name = name
 		self.identity = identify(name)
 		self.examiner = None
 		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
+		self.fallback = fallback
 		if ear:
 			self.ear = listen(self)
 
@@ -49,9 +50,7 @@ class Brain(object):
 			else:
 				return say(randphrase("exhausted"))
 		else:
-			self.ingest(sentence)
-			if self.retorts:
-				return say(self.retort(sentence))
+			return self.ingest(sentence) or say(self.retorts and self.retort(sentence) or self.fallback and randphrase("unsure"))
 
 	def ingest(self, sentence):
 		# glean information, populate topics{} and history[]
@@ -70,7 +69,6 @@ class Brain(object):
 				q = question("who am i?")
 				q.answers.append(self.examiner.key)
 				q.put()
-				say("hello %s"%(self.examiner.name,))
 				# what's going on here? no qualifiers???
 				if self.examiner.qualifiers: # should ALWAYS be qualifiers :-\
 					qual = random.choice(self.examiner.qualifiers).get().content()
@@ -81,15 +79,16 @@ class Brain(object):
 						elif qpos == "PRP$":
 							qword = "your"
 						qper.append(qword)
-					say(" ".join(qper))
+					return say(" ".join(qper))
+				return say("hello %s"%(self.examiner.name,))
 			elif "because" in sentence:
 				event, reason = sentence.split(" because ")
 				Reason(person=self.examiner and self.examiner.key, name=event, reason=phrase(reason)).put()
-				say("ok, so %s because %s?"%(event, reason))
+				return say("ok, so %s because %s?"%(event, reason))
 			elif tagged[0][1].startswith("NN"):
 				if tagged[1][0] in ["is", "are"]: # learn it!
 					meaning(tagged[0][0], " ".join([w for (w, p) in tagged[2:]]))
-					say(randphrase("noted"))
+					return say(randphrase("noted"))
 				else:
 					pass # handle other verbs!!
 
@@ -135,3 +134,11 @@ class Brain(object):
 			if v:
 				v = v.replace(self.identity.name, "i")
 				return self.examiner and v.replace(self.examiner.name, "you") or v
+
+brains = {}
+
+def getBrain(name=None, mood="all", ear=False, retorts=True, fallback=False):
+	if name in brains:
+		return brains[name]
+	brains[name] = Brain(name, mood, ear, retorts, fallback)
+	return brains[name]

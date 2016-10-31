@@ -10,6 +10,8 @@ def load_corpora():
 
 load_corpora()
 
+_padding = "\n\n  %s\n      "
+
 def learn(word, deep=False):
 	w = Word.query(Word.word == word).get()
 	if w:
@@ -22,11 +24,12 @@ def learn(word, deep=False):
 	if deep and not w.meanings(True):
 		o = getoutput('dict -d wn "%s"'%(word,))
 		if not o.startswith("No"):
-			padded = "\n\n  %s\n      "%(word,)
-			if padded in o:
-				o = o.split(padded)[1]
-			else:
-				o = o.split("\n\n  %s\n      "%(word.title(),))[1]
+			options = [word, word.lower(), word.title()]
+			for option in options:
+				padded = _padding%(option,)
+				if padded in o:
+					o = o.split(padded)[1]
+					break
 			dz = o.replace("\n%s"%(" " * 13,), " ").replace("\n%s"%(" " * 11,),
 				" ").replace("\n%s"%(" " * 9,), " ").split("\n      ")
 			for d in dz:

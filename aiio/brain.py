@@ -3,7 +3,7 @@ from model import *
 from think import learn, phrase, meaning, question, identify, tag, nextNoun, retorts
 from util import randphrase
 from hear import listen
-from speak import say
+from speak import say, setBrevity
 """
 [('who', 'WP'), ('are', 'VBP'), ('you', 'PRP'), ('?', '.')]
 [('who', 'WP'), ('is', 'VBZ'), ('john', 'NN'), ('?', '.')]
@@ -20,13 +20,14 @@ MOODS = {
 }
 
 class Brain(object):
-	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False):
+	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False, brief=True):
 		self.name = name
 		self.identity = identify(name)
 		self.examiner = None
 		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
 		self.fallback = fallback
+		setBrevity(brief)
 		if ear:
 			self.ear = listen(self)
 

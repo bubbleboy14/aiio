@@ -1,16 +1,14 @@
-shorter answers!
 chris-style backrefs
  - topic extraction
  - reference history
-fix ear
- - untape mic?
- - js api (goog?)?
+ - use to change topic (if unsure)
+personality uploads!
+learn from examiner!
 complex clause comprehension
 answer
- - why -- check Reason then ask?
- - where -- cantools geo!!!
+ - why -- check Reason (invert sentence...) then ask?
  - when -- ask? (yahoo answers api? seems broken. something else?)
  - duckduckgo api???
 ingestion -> relations
-  - use this technique to process data (from wikipedia etc)
+ - use this technique to process data (from wikipedia etc)
 identity affinities

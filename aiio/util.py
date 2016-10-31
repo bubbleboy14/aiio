@@ -1,10 +1,21 @@
 import random
 
 phrases = {
+	"greeting": [
+		"salutations,",
+		"hello",
+		"hi",
+		"nice to meet you",
+		"greetings",
+		"what's up",
+		"what's shakin"
+	],
 	"rephrase": [
-		"so you're saying that",
+		"so you're telling me that",
 		"in other words,",
-		"so,"
+		"so,",
+		"ok, so",
+		"you're basically saying that"
 	],
 	"inquire": [
 		"please elaborate on",
@@ -28,6 +39,7 @@ phrases = {
 		"ummm.."
 	],
 	"exhausted": [
+		"how am i supposed to know?",
 		"i don't know anymore :(",
 		"you tell me"
 	],
@@ -46,5 +58,7 @@ phrases = {
 	]
 }
 
-def randphrase(ptype):
+def randphrase(ptype, extra=None):
+	if extra:
+		return random.choice(phrases[ptype] + [extra])
 	return random.choice(phrases[ptype])

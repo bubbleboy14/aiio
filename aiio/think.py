@@ -80,12 +80,12 @@ def wsum(name):
 	except Exception, e:
 		return None
 
-def research(person):
-	summary = wsum(person.name)
+def research(entity):
+	summary = wsum(entity.name)
 	if summary:
-		person.description = summary
-		person.summary = person.description.split("\n")[0]
-		person.qualifiers = [phrase(p).key for p in person.summary.split(". ")]
+		entity.description = summary
+		entity.summary = entity.description.split("\n")[0]
+		entity.qualifiers = [phrase(p).key for p in entity.summary.split(". ")]
 
 def identify(name):
 	person = Person.query(Person.name == name).get()
@@ -101,7 +101,7 @@ def tag(sentence):
 def nextNoun(tagged):
 	noun = []
 	for t in tagged:
-		if t[1].startswith("NN"):
+		if t[1].startswith("NN") or t[1] == "JJ":
 			noun.append(t[0])
 		elif noun:
 			break

@@ -23,7 +23,7 @@ class Brain(object):
 	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False, brief=True):
 		self.name = name
 		self._identity = identify(name).key
-		self.examiner = None
+		self._examiner = None
 		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
 		self.fallback = fallback
@@ -32,29 +32,42 @@ class Brain(object):
 			self.ear = listen(self)
 
 	def __call__(self, sentence):
+		sentence = sentence.lower()
 		tagged = tag(sentence)
-		if tagged[0][1] == "WP":
+		if tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
 		elif sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
+			return say(self.pinfo(subject=subject))
+		else:
+			return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+
+	def pinfo(self, person=None, subject=None):
+		if not person:
 			if "you" in subject:
 				person = self.identity()
 			elif subject == "me":
-				person = self.examiner
+				person = self.examiner()
+				if not person:
+					return randphrase("exhausted",
+						"you don't know yourself?")
 			else:
 				person = identify(subject)
-			content = person.content()
-			if content == person.name:
-				content = learn(subject, True).meaning()
-			if content:
-				return say(content)
-			else:
-				return say(randphrase("exhausted"))
+		content = person.content()
+		if content == person.name and subject:
+			content = learn(subject, True).meaning()
+		if content:
+			return content
 		else:
-			return self.ingest(sentence) or say(self.retorts and self.retort(sentence) or self.fallback and randphrase("unsure"))
+			return randphrase("exhausted")
 
 	def identity(self):
 		return self._identity.get()
+
+	def examiner(self, name=None):
+		if not self._examiner and name:
+			self._examiner = identify(name).key
+		return self._examiner and self._examiner.get()
 
 	def ingest(self, sentence):
 		# glean information, populate topics{} and history[]
@@ -62,37 +75,38 @@ class Brain(object):
 		if len(tagged) > 1:
 			if tagged[0][0] == "i" and tagged[1][0] == "am":
 				desc = sentence[5:]
-				if not self.examiner:
-					self.examiner = identify(nextNoun(tagged[2:]))
-				elif not self.examiner.summary:
-					self.examiner.summary = desc
+				examiner = self.examiner(nextNoun(tagged[2:]))
+				if not examiner.summary:
+					examiner.summary = desc
 				else:
-					self.examiner.description = "%s %s"%(self.examiner.description, desc)
-				self.examiner.qualifiers.append(phrase(desc).key)
-				self.examiner.put()
+					examiner.description = "%s %s"%(examiner.description, desc)
+				examiner.qualifiers.append(phrase(desc).key)
+				examiner.put()
 				q = question("who am i?")
-				q.answers.append(self.examiner.key)
+				q.answers.append(examiner.key)
 				q.put()
 				# what's going on here? no qualifiers???
-				if self.examiner.qualifiers: # should ALWAYS be qualifiers :-\
-					qual = random.choice(self.examiner.qualifiers).get().content()
+				if examiner.qualifiers: # should ALWAYS be qualifiers :-\
+					qual = random.choice(examiner.qualifiers).get().content()
 					qper = []
 					for (qword, qpos) in tag(qual):
-						if qpos == "PRP":
+						if qpos == "PRP" and qword in ["i", "me"]:
 							qword = "you"
-						elif qpos == "PRP$":
+						elif qpos == "PRP$" and qword == "my":
 							qword = "your"
 						qper.append(qword)
-					return say(" ".join(qper))
-				return say("hello %s"%(self.examiner.name,))
+					return " ".join(qper)
+				return "%s %s"%(randphrase("greeting"), examiner.name)
 			elif "because" in sentence:
 				event, reason = sentence.split(" because ")
-				Reason(person=self.examiner and self.examiner.key, name=event, reason=phrase(reason)).put()
-				return say("ok, so %s because %s?"%(event, reason))
+				Reason(person=self._examiner, name=event, reason=phrase(reason)).put()
+				return "%s %s because %s?"%(randphrase("rephrase"),
+					event, reason)
 			elif tagged[0][1].startswith("NN"):
 				if tagged[1][0] in ["is", "are"]: # learn it!
-					meaning(tagged[0][0], " ".join([w for (w, p) in tagged[2:]]))
-					return say(randphrase("noted"))
+					mdef = " ".join([w for (w, p) in tagged[2:]])
+					meaning(tagged[0][0], mdef)
+					return randphrase("noted")
 				else:
 					pass # handle other verbs!!
 
@@ -103,6 +117,7 @@ class Brain(object):
 		q = question(sentence)
 		if not q.answers:
 			tagged = tag(sentence)
+			print tagged
 			if tagged[0][0] == "who":
 				if tagged[1][0] in ["is", "are"]:
 					if tagged[2][0] == "you":
@@ -110,7 +125,11 @@ class Brain(object):
 					else:
 						q.answers.append(identify(nextNoun(tagged[2:])).key)
 				elif tagged[1][0] == "am":
-					return "i don't know. who are you?"
+					person = self.examiner()
+					if person:
+						return self.pinfo(person=person)
+					return randphrase("exhausted",
+						"i don't know. who do you think you are?")
 				else:
 					return randphrase("what")
 			elif tagged[0][0] == "what":
@@ -122,10 +141,15 @@ class Brain(object):
 					q.answers.append(meanings[0].key)
 				else:
 					return randphrase("what")
+			elif tagged[0][0] == "where":
+				place = getPlace(nextNoun(tagged[2:]))
+				location = place.getLocation()
+				return location.name
 			elif tagged[0][0] == "why":
-				return "nevermind the whys and wherefores!"# placeholder
+				return randphrase("exhausted",
+					"nevermind the whys and wherefores!") # placeholder
 				# TODO: first check reason. then... something?
-			else: # when/why: yahoo answers api. where: google maps api?
+			else: # when/why: yahoo answers api?
 				return randphrase("what")
 			q.put()
 		return random.choice(q.answers).get().content()
@@ -137,7 +161,7 @@ class Brain(object):
 			v = retorts[r](sentence)
 			if v:
 				v = v.replace(self.identity().name, "i")
-				return self.examiner and v.replace(self.examiner.name, "you") or v
+				return self._examiner and v.replace(self.examiner().name, "you") or v
 
 brains = {}
 

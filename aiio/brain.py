@@ -22,7 +22,7 @@ MOODS = {
 class Brain(object):
 	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False, brief=True):
 		self.name = name
-		self.identity = identify(name)
+		self._identity = identify(name).key
 		self.examiner = None
 		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
@@ -38,7 +38,7 @@ class Brain(object):
 		elif sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			if "you" in subject:
-				person = self.identity
+				person = self.identity()
 			elif subject == "me":
 				person = self.examiner
 			else:
@@ -52,6 +52,9 @@ class Brain(object):
 				return say(randphrase("exhausted"))
 		else:
 			return self.ingest(sentence) or say(self.retorts and self.retort(sentence) or self.fallback and randphrase("unsure"))
+
+	def identity(self):
+		return self._identity.get()
 
 	def ingest(self, sentence):
 		# glean information, populate topics{} and history[]
@@ -103,7 +106,7 @@ class Brain(object):
 			if tagged[0][0] == "who":
 				if tagged[1][0] in ["is", "are"]:
 					if tagged[2][0] == "you":
-						q.answers.append(self.identity.key)
+						q.answers.append(self._identity)
 					else:
 						q.answers.append(identify(nextNoun(tagged[2:])).key)
 				elif tagged[1][0] == "am":
@@ -133,7 +136,7 @@ class Brain(object):
 		for r in retz:
 			v = retorts[r](sentence)
 			if v:
-				v = v.replace(self.identity.name, "i")
+				v = v.replace(self.identity().name, "i")
 				return self.examiner and v.replace(self.examiner.name, "you") or v
 
 brains = {}

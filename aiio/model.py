@@ -1,4 +1,4 @@
-import random, iverbs
+import random, nltk, speak, iverbs, util
 from cantools import db, geo
 
 POS = { "JJ": "adj", "VB": "v", "NN": "n" }
@@ -193,6 +193,30 @@ class Person(Object): # who
 
     def content(self):
         return self.qualifiers and random.choice(self.qualifiers).get().content() or self.summary or self.description or self.name
+
+    # version 1 (current): use util words directly
+    # version 2 (future) : check synonyms/forms
+    def _scan(self, words):
+        sentences = nltk.sent_tokenize(self.description)
+        hits = []
+        for sentence in sentences:
+            for word in words:
+                if word in sentence:
+                    hits.append(sentence)
+        return hits
+
+    def info(self):
+        asps = {}
+        for asp, words in util.aspects.items():
+            asps[asp] = self._scan(words)
+        return asps
+
+    def assessment(self):
+        for pers, words in util.personalities:
+            hits = self._scan(words)
+            if hits:
+                return "%s. %s is a %s."%(speak.truncate(random.choice(hits)),
+                    self.name, pers)
 
 class Thing(Object): # what
     purpose = db.ForeignKey(kind=Idea)

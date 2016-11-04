@@ -1,7 +1,7 @@
 import random
 from model import *
-from think import learn, phrase, meaning, question, identify, tag, nextNoun, retorts
-from util import randphrase
+from think import learn, phrase, meaning, question, identify, tag, nextNoun, retorts, assess
+from util import triggers, randphrase
 from hear import listen
 from speak import say, setBrevity
 """
@@ -34,13 +34,22 @@ class Brain(object):
 	def __call__(self, sentence):
 		sentence = sentence.lower()
 		tagged = tag(sentence)
-		if tagged[0][1] in ["WP", "WRB"]:
+		opinion = self.opinion(sentence)
+		if opinion:
+			return say(opinion)
+		elif tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
 		elif sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			return say(self.pinfo(subject=subject))
 		else:
 			return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+
+	def opinion(self, sentence):
+		for trigger in triggers["opinion"]:
+			if sentence.startswith(trigger):
+				subject = sentence[len(trigger) + 1:]
+				return assess(subject) or randphrase("ambivalent")
 
 	def pinfo(self, person=None, subject=None):
 		if not person:

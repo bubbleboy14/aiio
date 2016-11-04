@@ -1,8 +1,8 @@
-import wikipedia, nltk, random
+import wikipedia, nltk, random, speak
 from commands import getoutput
 from cantools.util import log, error
 from model import *
-from util import randphrase
+from util import randphrase, values
 
 def load_corpora():
 	for item in ["maxent_ne_chunker", "words", "averaged_perceptron_tagger", "punkt"]:
@@ -62,6 +62,25 @@ def phrase(p):
 
 def wordorphrase(s):
 	return " " in s and phrase(s) or learn(s)
+
+def facts(subject): # people only so far!!
+	person = identify(subject)
+	return {
+		"info": person.info(),
+		"assessment": person.assessment()
+	}
+
+def assess(subject):
+	person = identify(subject)
+	az = person.assessment()
+	if az:
+		return az
+	info = person.info()
+	for creation in info["creations"]:
+		for value, words in values.items():
+			for word in words:
+				if word in creation:
+					return "%s. %s"%(speak.truncate(creation), randphrase(value))
 
 def meaning(q, a):
 	m = Meaning(synonyms=[wordorphrase(q).key], definition=a)

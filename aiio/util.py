@@ -1,6 +1,80 @@
 import random
 
+triggers = {
+	"opinion": [
+		"what do you think of",
+		"what do you think about",
+		"what are your thoughts on",
+		"what's your take on",
+		"how do you feel about",
+		"what's your opinion of",
+		"do you like"
+	]
+}
+
+aspects = {
+	"creations": [
+#		"responsible for", # ??
+		"started",
+		"oversaw",
+		"initiated",
+		"invented",
+		"created",
+		"directed"
+	],
+	"opinions": [
+		"felt", "thought", "believed"
+	],
+	"attractions": [
+		"liked", "loved", "appreciated", "enjoyed"
+	],
+	"aversions": [
+		"disliked", "hated"
+	]
+}
+
+values = {
+	"good": [
+		"charity", "peace", "whistleblow", "love",
+		"goodness", "free", "liberty", "cure"
+	],
+	"bad": [
+		"war", "death", "murder", "killing", "havoc",
+		"violence", "terror", "starvation", "genocide"
+	]
+}
+
+personalities = [ # ordered by intensity
+	["monster", [
+		"killed", "murdered", "invaded", "attacked", "terrorized", "tortured"
+	]],
+	["hero", [
+		"saved", "released", "rescued"
+	]],
+	["genius", [
+		"invented", "discovered", "developed", "pioneered"
+	]],
+	["jerk", [
+		"hurt", "harmed", "injured"
+	]],
+	["homie", [
+		"helped", "supported", "assisted"
+	]]
+]
+
 phrases = {
+	"good": [
+		"that rocks",
+		"that's what's up",
+		"heck yeah",
+		"awesome"
+	],
+	"bad": [
+		"that sucks",
+		"that's rough",
+		"yikes",
+		":-("
+	],
 	"greeting": [
 		"salutations,",
 		"hello",
@@ -55,6 +129,12 @@ phrases = {
 		"not exactly...",
 		"don't say that.",
 		"i don't want to hear it!"
+	],
+	"ambivalent": [
+		"eh, no strong opinion",
+		"i dunno",
+		"i guess i just don't know",
+		"dude, i could care less"
 	]
 }
 

@@ -10,12 +10,17 @@ def setBrevity(onoroff):
 def noParens(phrase):
 	return re.sub(NPRX, "", phrase)
 
-def say(phrase):
+def truncate(phrase):
 	print "[IN]", phrase
+	phrase = noParens(phrase)
+	for punct in [".", ";", ",", ":"]:
+		if len(phrase) > 200: # leaves room for comfortable split
+			phrase = phrase[:300].rsplit(punct, 1)[0]
+	print "[OUT]", phrase
+	return phrase
+
+def say(phrase):
 	if BRIEF and len(phrase) > 200:
-		phrase = noParens(phrase)
-		if (len(phrase)) > 200:
-			phrase = phrase[:200].rsplit(".", 1)[0]
-		print "[OUT]", phrase
+		phrase = truncate(phrase)
 	return phrase
 #	cmd('espeak "%s"'%(phrase,))

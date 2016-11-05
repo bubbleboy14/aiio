@@ -116,7 +116,8 @@ phrases = {
 	"unsure": [
 		"i'm not sure",
 		"it's hard to say",
-		"ummm.."
+		"ummm..",
+		"you ask a lot of questions"
 	],
 	"exhausted": [
 		"how am i supposed to know?",

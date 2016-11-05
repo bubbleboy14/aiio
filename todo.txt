@@ -1,9 +1,4 @@
-subjective judging (sentiment analysis)
-chris-style backrefs
- - topic extraction
- - reference history
- - use to change topic (if unsure)
-special handling of i/you info
+special (improved) handling of i/you info
 personality uploads!
 learn from examiner!
 complex clause comprehension

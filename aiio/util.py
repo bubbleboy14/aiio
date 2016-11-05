@@ -90,6 +90,12 @@ phrases = {
 		"what's up",
 		"what's shakin"
 	],
+	"redirect": [
+		"i wanna hear more about",
+		"let's get back to",
+		"wouldn't you rather talk more about",
+		"i'd rather discuss"
+	],
 	"rephrase": [
 		"so you're telling me that",
 		"in other words,",

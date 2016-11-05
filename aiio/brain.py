@@ -27,6 +27,7 @@ class Brain(object):
 		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
 		self.fallback = fallback
+		self.topics = []
 		setBrevity(brief)
 		if ear:
 			self.ear = listen(self)
@@ -49,7 +50,15 @@ class Brain(object):
 		for trigger in triggers["opinion"]:
 			if sentence.startswith(trigger):
 				subject = sentence[len(trigger) + 1:]
-				return assess(subject) or randphrase("ambivalent")
+				assessment = assess(subject)
+				if assessment:
+					self.topics.append(subject)
+					return assessment
+				if self.topics:
+					random.shuffle(self.topics)
+					return "%s. %s %s."%(randphrase("ambivalent"),
+						randphrase("redirect"), self.topics.pop())
+				return randphrase("ambivalent")
 
 	def pinfo(self, person=None, subject=None):
 		if not person:
@@ -76,7 +85,6 @@ class Brain(object):
 		return self._examiner and self._examiner.get()
 
 	def ingest(self, sentence):
-		# glean information, populate topics{} and history[]
 		tagged = tag(sentence)
 		if len(tagged) > 1:
 			if tagged[0][0] == "i" and tagged[1][0] == "am":

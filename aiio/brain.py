@@ -65,10 +65,7 @@ class Brain(object):
 		content = person.content()
 		if content == person.name and subject:
 			content = learn(subject, True).meaning()
-		if content:
-			return content
-		else:
-			return randphrase("exhausted")
+		return content or randphrase("exhausted")
 
 	def identity(self):
 		return self._identity.get()

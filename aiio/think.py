@@ -81,6 +81,9 @@ def assess(subject):
 			for word in words:
 				if word in creation:
 					return "%s %s"%(speak.truncate(creation), randphrase(value))
+	for aspect in ["opinions", "attractions", "aversions"]:
+		if info[aspect]:
+			return random.choice(info[aspect])
 
 def meaning(q, a):
 	m = Meaning(synonyms=[wordorphrase(q).key], definition=a)

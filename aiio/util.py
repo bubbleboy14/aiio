@@ -14,7 +14,7 @@ triggers = {
 
 aspects = {
 	"creations": [
-#		"responsible for", # ??
+		"responsible for", # maybe remove later?
 		"started",
 		"oversaw",
 		"initiated",
@@ -49,7 +49,7 @@ personalities = [ # ordered by intensity
 		"killed", "murdered", "invaded", "attacked", "terrorized", "tortured"
 	]],
 	["hero", [
-		"saved", "released", "rescued"
+		"saved", "rescued"
 	]],
 	["genius", [
 		"invented", "discovered", "developed", "pioneered"
@@ -71,7 +71,10 @@ phrases = {
 	],
 	"bad": [
 		"that sucks",
+		"that's lame",
+		"that's wack",
 		"that's rough",
+		"pretty evil, right?",
 		"yikes",
 		":-("
 	],

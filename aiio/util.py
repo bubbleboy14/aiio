@@ -46,7 +46,10 @@ values = {
 
 personalities = [ # ordered by intensity
 	["monster", [
-		"killed", "murdered", "invaded", "attacked", "terrorized", "tortured"
+		"murdered", "invaded", "terrorized", "tortured"
+	]],
+	["psycho", [
+		"misled", "duped", "tricked", "attacked", "killed", "violated"
 	]],
 	["hero", [
 		"saved", "rescued"
@@ -64,19 +67,19 @@ personalities = [ # ordered by intensity
 
 phrases = {
 	"good": [
-		"that rocks",
-		"that's what's up",
-		"heck yeah",
-		"awesome"
+		"that rocks.",
+		"that's what's up.",
+		"heck yeah!",
+		"awesome."
 	],
 	"bad": [
-		"that sucks",
-		"that's lame",
-		"that's wack",
-		"that's rough",
+		"that sucks.",
+		"laaaaaaaaaame.",
+		"that's wack.",
+		"that's rough.",
 		"pretty evil, right?",
-		"yikes",
-		":-("
+		"yikes.",
+		"gross."
 	],
 	"greeting": [
 		"salutations,",

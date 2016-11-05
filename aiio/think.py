@@ -80,7 +80,7 @@ def assess(subject):
 		for value, words in values.items():
 			for word in words:
 				if word in creation:
-					return "%s. %s"%(speak.truncate(creation), randphrase(value))
+					return "%s %s"%(speak.truncate(creation), randphrase(value))
 
 def meaning(q, a):
 	m = Meaning(synonyms=[wordorphrase(q).key], definition=a)

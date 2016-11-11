@@ -194,6 +194,14 @@ class Person(Object): # who
     def content(self):
         return self.qualifiers and random.choice(self.qualifiers).get().content() or self.summary or self.description or self.name
 
+    def opinion(self, topic): # topic already lowercase
+        # do this better -- single query would be ideal
+        oz = Opinion.query(Opinion.person == self.key).all()
+        pk = Phrase.query(Phrase.key.in_([o.phrase for o in oz]),
+            db.func.lower(Phrase.phrase).like("%%%s%%"%(topic,))).all()
+        if pk:
+            return random.choice(pk).phrase
+
     # version 1 (current): use util words directly
     # version 2 (future) : check synonyms/forms
     def _scan(self, words):
@@ -247,6 +255,10 @@ class Affinity(db.TimeStampedBase):
     person = db.ForeignKey(kind=Person)
     idea = db.ForeignKey(kind=Idea)
     value = db.Float() # -1.0 to 1.0
+
+class Opinion(db.TimeStampedBase):
+    person = db.ForeignKey(kind=Person)
+    phrase = db.ForeignKey(kind=Phrase)
 
 class Question(db.TimeStampedBase):
     phrase = db.ForeignKey(kind=Phrase) # who what when where why how

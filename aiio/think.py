@@ -1,5 +1,6 @@
 import wikipedia, nltk, random, speak
 from commands import getoutput
+from cantools.web import fetch, strip_html
 from cantools.util import log, error
 from model import *
 from util import randphrase, values
@@ -70,7 +71,14 @@ def facts(subject): # people only so far!!
 		"assessment": person.assessment()
 	}
 
-def assess(subject):
+def assess(subject, identity=None):
+	if identity:
+		# check for opinions
+		# 1) full phrase
+		# 2) by word
+		op = identity.opinion(subject)
+		if op:
+			return op
 	person = identify(subject)
 	az = person.assessment()
 	if az:
@@ -109,12 +117,26 @@ def research(entity):
 		entity.summary = entity.description.split("\n")[0]
 		entity.qualifiers = [phrase(p).key for p in entity.summary.split(". ")]
 
+def find_opinions(person):
+	res = fetch("en.wikiquote.org",
+		"/w/api.php?format=json&action=parse&page=%s&prop=text"%("_".join(person.name.split(" ")),),
+		protocol="https", asjson=True)
+	if res:
+		draw = strip_html(res['parse']['text']['*'])
+		dlines = filter(lambda x: len(x) > 30,
+			[d.split("\n\n")[0] for d in draw.split("\n\n\n\n\n")])
+		puts = []
+		for dline in dlines:
+			puts.append(Opinion(person=person.key, phrase=phrase(dline).key))
+		db.put_multi(puts)
+
 def identify(name):
 	person = Person.query(Person.name == name).get()
 	if not person:
 		person = Person(name=name)
 		research(person)
 		person.put()
+		find_opinions(person)
 	return person
 
 def tag(sentence):

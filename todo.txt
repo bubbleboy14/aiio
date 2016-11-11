@@ -1,11 +1,13 @@
-special (improved) handling of i/you info
-personality uploads!
-learn from examiner!
+Opinion (identity affinities)
+ + personality uploads!
+   x Chomsky
+   - Trump, Sanders
+improved handling of i/you info
+learn from examiner (more)!
 complex clause comprehension
 answer
  - why -- check Reason (invert sentence...) then ask?
- - when -- ask? (yahoo answers api? seems broken. something else?)
+ - when -- ask? (yahoo answers api? seems broken.)
  - duckduckgo api???
 ingestion -> relations
  - use this technique to process data (from wikipedia etc)
-identity affinities / opinions

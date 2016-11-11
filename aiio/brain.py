@@ -50,7 +50,7 @@ class Brain(object):
 		for trigger in triggers["opinion"]:
 			if sentence.startswith(trigger):
 				subject = sentence[len(trigger) + 1:]
-				assessment = assess(subject)
+				assessment = assess(subject, self.identity())
 				if assessment:
 					self.topics.append(subject)
 					return assessment

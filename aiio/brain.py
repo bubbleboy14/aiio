@@ -142,7 +142,7 @@ class Brain(object):
 			if tagged[0][0] == "who":
 				if tagged[1][0] in ["is", "are"]:
 					if tagged[2][0] == "you":
-						q.answers.append(self._identity)
+						return "i'm %s"%(self.identity().name,)
 					else:
 						q.answers.append(identify(nextNoun(tagged[2:])).key)
 				elif tagged[1][0] == "am":
@@ -155,6 +155,8 @@ class Brain(object):
 					return randphrase("what")
 			elif tagged[0][0] == "what":
 				if tagged[1][0] in ["is", "are"]:
+					if "your name" in sentence:
+						return self.identity().name
 					obj = learn(nextNoun(tagged[2:]), True)
 					meanings = obj.meanings()
 					if not meanings:

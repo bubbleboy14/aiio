@@ -4,8 +4,9 @@ k mashup
  - if -1 person: where did you go? (variant)
  - if hat: nice hat (variant)
  - if sentiment: (appropriate response)
-convo: batch speech commands (to avoid crashes)
+aiio auto-install of necessary nltk corpa
 Trump, Sanders
+convo: batch speech commands (to avoid crashes)
 improved handling of i/you info
 learn from examiner (more)!
 complex clause comprehension

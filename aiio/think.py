@@ -15,9 +15,7 @@ _padding = "\n\n  %s\n      "
 
 def learn(word, deep=False):
 	w = Word.query(Word.word == word).get()
-	if w:
-		log("found %s"%(word,))
-	else:
+	if not w:
 		log("learning %s"%(word,))
 		w = Word(word=word)
 		w.put() # for recursion...

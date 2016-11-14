@@ -1,6 +1,6 @@
 import random
 from model import *
-from think import learn, phrase, meaning, question, identify, tag, nextNoun, retorts, assess
+from think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
 from util import triggers, randphrase
 from hear import listen
 from speak import say, setBrevity
@@ -23,6 +23,7 @@ class Brain(object):
 	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False, brief=True):
 		self.name = name
 		self._identity = identify(name).key
+		self.opinionate()
 		self._examiner = None
 		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
 		self.retorts = retorts
@@ -33,6 +34,8 @@ class Brain(object):
 			self.ear = listen(self)
 
 	def __call__(self, sentence):
+		if sentence.startswith("*"):
+			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()
 		tagged = tag(sentence)
 		opinion = self.opinion(sentence)
@@ -78,6 +81,10 @@ class Brain(object):
 
 	def identity(self):
 		return self._identity.get()
+
+	def opinionate(self):
+		if not Opinion.query(Opinion.person == self._identity).count():
+			find_opinions(self.identity())
 
 	def examiner(self, name=None):
 		if not self._examiner and name:

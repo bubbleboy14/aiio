@@ -66,6 +66,45 @@ personalities = [ # ordered by intensity
 ]
 
 phrases = {
+	"joy": [
+		"you seem pleased with yourself",
+		"what's so funny?",
+		"what are you smiling about?",
+		"are you happy because of me?"
+	],
+	"sorrow": [
+		"what's the matter?",
+		"what's wrong?",
+		"are you feeling ok?",
+		"you seem sad"
+	],
+	"anger": [
+		"wow, calm down!",
+		"geez, what got you so riled up?",
+		"did i say something wrong?",
+		"have i upset you?",
+		"are you mad?"
+	],
+	"surprise": [
+		"surprised?",
+		"what's so shocking?",
+		"didn't expect that?"
+	],
+	"headwear": [
+		"nice hat",
+		"cool hat",
+		"i like your hat"
+	],
+	"join": [
+		"hello there!",
+		"and who might you be?",
+		"are you friendly?"
+	],
+	"leave": [
+		"leaving me already?",
+		"where are you going?",
+		"come back!"
+	],
 	"good": [
 		"that rocks.",
 		"that's what's up.",

@@ -136,7 +136,6 @@ def identify(name):
 		person = Person(name=name)
 		research(person)
 		person.put()
-		find_opinions(person)
 	return person
 
 def tag(sentence):

@@ -1,12 +1,11 @@
-convo: batch speech commands (to avoid crashes)
 k mashup
  - sentiment check on 1s interval
  - if +1 person: who are you? (variant)
  - if -1 person: where did you go? (variant)
  - if hat: nice hat (variant)
  - if sentiment: (appropriate response)
+convo: batch speech commands (to avoid crashes)
 aiio auto-install necessary nltk corpa (already set up?)
-Trump, Sanders
 improved handling of i/you info
 learn from examiner (more)!
 complex clause comprehension

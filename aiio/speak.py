@@ -13,7 +13,7 @@ def noParens(phrase):
 def truncate(phrase):
 	print "[IN]", phrase
 	phrase = noParens(phrase)
-	for punct in [".", "!", "?", ";", ":"]:
+	for punct in ["!", "?", ".", ";", ":"]:
 		if len(phrase) > 200: # leaves room for comfortable split
 			phrase = phrase[:300].rsplit(punct, 1)[0]
 	print "[OUT]", phrase

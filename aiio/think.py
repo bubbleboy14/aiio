@@ -119,7 +119,7 @@ def find_opinions(person):
 	res = fetch("en.wikiquote.org",
 		"/w/api.php?format=json&action=parse&page=%s&prop=text"%("_".join(person.name.split(" ")),),
 		protocol="https", asjson=True)
-	if res:
+	if res and 'parse' in res:
 		draw = strip_html(res['parse']['text']['*'])
 		dlines = filter(lambda x: len(x) > 30,
 			[d.split("\n\n")[0] for d in draw.split("\n\n\n\n\n")])

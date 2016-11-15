@@ -1,9 +1,5 @@
 k mashup
- - sentiment check on 1s interval
- - if +1 person: who are you? (variant)
- - if -1 person: where did you go? (variant)
- - if hat: nice hat (variant)
- - if sentiment: (appropriate response)
+ - don't pester user (hat, etc)
 convo: batch speech commands (to avoid crashes)
 aiio auto-install necessary nltk corpa (already set up?)
 improved handling of i/you info

@@ -146,6 +146,8 @@ class Brain(object):
 					else:
 						q.answers.append(identify(nextNoun(tagged[2:])).key)
 				elif tagged[1][0] == "am":
+					if "i talking to" in sentence:
+						return "my name is %s"%(self.identity().name,)
 					person = self.examiner()
 					if person:
 						return self.pinfo(person=person)

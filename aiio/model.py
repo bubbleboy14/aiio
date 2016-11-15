@@ -200,7 +200,10 @@ class Person(Object): # who
         pk = Phrase.query(Phrase.key.in_([o.phrase for o in oz]),
             db.func.lower(Phrase.phrase).like("%%%s%%"%(topic,))).all()
         if pk:
-            return random.choice(pk).phrase
+            sents = nltk.sent_tokenize(random.choice(pk).phrase)
+            for sent in sents:
+                if topic in sent.lower():
+                    return sent
 
     # version 1 (current): use util words directly
     # version 2 (future) : check synonyms/forms

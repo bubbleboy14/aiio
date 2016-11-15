@@ -93,6 +93,8 @@ phrases = {
 	"headwear": [
 		"nice hat",
 		"cool hat",
+		"love the hat",
+		"groovy headwear",
 		"i like your hat"
 	],
 	"join": [

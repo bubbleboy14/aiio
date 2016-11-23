@@ -69,6 +69,15 @@ class Symbol(db.TimeStampedBase):
         r = q.fetch(1, random.randint(q.count()))
         return r and r[0]
 
+def stem(word, hard=False):
+    if word.endswith("ed"):
+        word = word[:-2]
+    if word.endswith("ing"):
+        word = word[:-3]
+    if hard and word.endswith("s"):
+        word = word[:-1]
+    return word
+
 class Word(Symbol):
     word = db.String()
 
@@ -86,14 +95,7 @@ class Word(Symbol):
     # functions below are for VERBS ONLY (self.meanings()[x].part == 'v')
     def root(self):
         w = IRR.get(self.word)
-        if w:
-            return w["root"]
-        w = self.word
-        if w.endswith("ed"):
-            w = w[:-2]
-        if w.endswith("ing"):
-            w = w[:-3]
-        return w
+        return w and w["root"] or stem(self.word)
 
     def first(self):
         w = IRR.get(self.word)
@@ -204,6 +206,14 @@ class Person(Object): # who
             for sent in sents:
                 if topic in sent.lower():
                     return sent
+        # split up!
+        if " " in topic:
+            tz = topic.split(" ")
+            tz.sort(lambda a, b: len(a) < len(b) and 1 or -1)
+            for part in tz:
+                op = self.opinion(stem(part, True))
+                if op:
+                    return op
 
     # version 1 (current): use util words directly
     # version 2 (future) : check synonyms/forms

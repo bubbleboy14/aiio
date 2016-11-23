@@ -1,13 +1,15 @@
-k mashup
- - don't pester user (hat, etc)
-convo: batch speech commands (to avoid crashes)
-aiio auto-install necessary nltk corpa (already set up?)
+opinions:
+ - filter out quotes w/ identity references
+constructed responses:
+ - use words (mostly adj, adv, v) favored by identity
 improved handling of i/you info
-learn from examiner (more)!
 complex clause comprehension
 answer
  - why -- check Reason (invert sentence...) then ask?
  - when -- ask? (yahoo answers api? seems broken.)
  - duckduckgo api???
+learn from examiner (more)!
 ingestion -> relations
  - use this technique to process data (from wikipedia etc)
+convo: batch speech commands (to avoid crashes)
+aiio auto-install necessary nltk corpa (already set up?)

@@ -1,5 +1,5 @@
 import re
-from cantools.util import cmd
+#from cantools.util import cmd
 
 BRIEF = False
 NPRX = re.compile(r'\([^)]*\)')

@@ -16,7 +16,8 @@ setup(
 #        "ct >= 0.8.14",
         "wikipedia >= 1.4.0",
         "nltk >= 3.2.1",
-        "pocketsphinx >= 0.1.3"
+        "pocketsphinx >= 0.1.3",
+        "duckduckpy >= 0.2"
     ],
     classifiers = [
         'Development Status :: 3 - Alpha',

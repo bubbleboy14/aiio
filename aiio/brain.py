@@ -1,9 +1,9 @@
 import random
 from model import *
-from think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
-from util import triggers, randphrase
-from hear import listen
-from speak import say, setBrevity
+from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
+from .util import triggers, randphrase
+from .hear import listen
+from .speak import say, setBrevity
 """
 [('who', 'WP'), ('are', 'VBP'), ('you', 'PRP'), ('?', '.')]
 [('who', 'WP'), ('is', 'VBZ'), ('john', 'NN'), ('?', '.')]
@@ -138,7 +138,7 @@ class Brain(object):
 		q = question(sentence)
 		if not q.answers:
 			tagged = tag(sentence)
-			print tagged
+			print(tagged)
 			if tagged[0][0] == "who":
 				if tagged[1][0] in ["is", "are"]:
 					if tagged[2][0] == "you":

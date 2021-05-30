@@ -1,4 +1,5 @@
-import random, nltk, speak, iverbs, util
+import random, nltk
+from . import speak, iverbs, util
 from cantools import db, geo
 
 POS = { "JJ": "adj", "VB": "v", "NN": "n" }

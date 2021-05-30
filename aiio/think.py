@@ -1,9 +1,13 @@
-import wikipedia, nltk, random, speak
-from commands import getoutput
+import wikipedia, nltk, random
+try: # py2
+	from commands import getoutput
+except: # py3
+	from subprocess import getoutput
 from cantools.web import fetch, strip_html
 from cantools.util import log, error
+from . import speak
 from model import *
-from util import randphrase, values
+from .util import randphrase, values
 
 def load_corpora():
 	for item in ["maxent_ne_chunker", "words", "averaged_perceptron_tagger", "punkt"]:
@@ -103,9 +107,9 @@ def question(q):
 def wsum(name):
 	try:
 		return wikipedia.summary(name)
-	except wikipedia.DisambiguationError, e:
+	except wikipedia.DisambiguationError as e:
 		return wikipedia.summary(str(e).split("\n")[1])
-	except Exception, e:
+	except Exception:
 		return None
 
 def research(entity):

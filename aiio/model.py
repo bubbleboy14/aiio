@@ -62,12 +62,12 @@ class Symbol(db.TimeStampedBase):
 
     def meaning(self):
         q = Meaning.query(Meaning.synonyms.contains(self.key.urlsafe()))
-        r = q.fetch(1, random.randint(q.count()))
+        r = q.fetch(1, random.randint(0, q.count()))
         return r and r[0]
 
     def opposite(self):
         q = Meaning.query(Meaning.antonyms.contains(self.key.urlsafe()))
-        r = q.fetch(1, random.randint(q.count()))
+        r = q.fetch(1, random.randint(0, q.count()))
         return r and r[0]
 
 def stem(word, hard=False):
@@ -150,6 +150,8 @@ class Idea(Symbol):
     expressions = db.ForeignKey(kinds=[Word, Phrase], repeated=True)
 
     def content(self):
+        if not len(self.expressions):
+            print("Idea.content(): no expressions!")
         return self.expressions[random.randint(0, len(self.expressions) - 1)].get().content()
 
 class Meaning(db.TimeStampedBase):
@@ -159,6 +161,8 @@ class Meaning(db.TimeStampedBase):
     definition = db.Text()
 
     def content(self):
+        if not self.definition:
+            print("Meaning.content(): no definition!")
         return self.definition
 
 class Object(Idea):

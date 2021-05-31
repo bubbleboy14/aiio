@@ -1,4 +1,4 @@
-import wikipedia, nltk, random
+import random, nltk, duckduckpy, wikipedia
 try: # py2
 	from commands import getoutput
 except: # py3
@@ -51,7 +51,7 @@ def learn(word, deep=False):
 				m.definition = d
 				puts.append(m)
 		if not w.meanings(True):
-			puts.append(Meaning(definition=wsum(w.word), synonyms=[w.key]))
+			puts.append(Meaning(definition=summy(w.word), synonyms=[w.key]))
 	puts and db.put_multi(puts)
 	return w
 
@@ -105,6 +105,7 @@ def question(q):
 	return Question.query(Question.phrase == p.key).get() or Question(phrase=p.key)
 
 def wsum(name):
+	print("checking wikipedia for", name)
 	try:
 		return wikipedia.summary(name)
 	except wikipedia.DisambiguationError as e:
@@ -112,12 +113,21 @@ def wsum(name):
 	except Exception:
 		return None
 
+def dsum(name):
+	print("checking duckduckgo for", name)
+	return duckduckpy.query(name).abstract
+
+def summy(name):
+	return dsum(name) or wsum(name)
+
 def research(entity):
-	summary = wsum(entity.name)
+	summary = summy(entity.name)
 	if summary:
 		entity.description = summary
-		entity.summary = entity.description.split("\n")[0]
+		entity.summary = speak.truncate(summary)
 		entity.qualifiers = [phrase(p).key for p in entity.summary.split(". ")]
+	else:
+		print("thing.research() FAILED for", entity)
 
 def find_opinions(person):
 	res = fetch("en.wikiquote.org",
@@ -133,6 +143,7 @@ def find_opinions(person):
 		db.put_multi(puts)
 
 def identify(name):
+	print("identify", name)
 	person = Person.query(Person.name == name).get()
 	if not person:
 		person = Person(name=name)
@@ -143,13 +154,19 @@ def identify(name):
 def tag(sentence):
 	return nltk.pos_tag(nltk.word_tokenize(sentence.replace("n't", " not")))
 
-def nextNoun(tagged):
+def nextNoun(tagged, force=True):
 	noun = []
 	for t in tagged:
 		if t[1].startswith("NN") or t[1] == "JJ":
 			noun.append(t[0])
 		elif noun:
 			break
+	if force and not noun:
+		for t in tagged:
+			if noun and t[1] == ".":
+				break
+			else:
+				noun.append(t[0])
 	return " ".join(noun)
 
 def inquire(sentence): # only return if word is unknown

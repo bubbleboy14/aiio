@@ -20,6 +20,12 @@ def truncate(phrase):
 	return phrase
 
 def say(phrase):
+	if phrase and not isinstance(phrase, str):
+		print("speak.say(): deriving content")
+		phrase = phrase.content()
+	if not phrase:
+		print("speak.say(): no phrase!")
+		return
 	if BRIEF and len(phrase) > 200:
 		phrase = truncate(phrase)
 	return phrase

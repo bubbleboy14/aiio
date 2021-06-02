@@ -4,6 +4,7 @@ from .think import learn, phrase, meaning, question, identify, find_opinions, ta
 from .util import triggers, randphrase
 from .hear import listen
 from .speak import say, setBrevity
+from .quoter import Quoter
 """
 [('who', 'WP'), ('are', 'VBP'), ('you', 'PRP'), ('?', '.')]
 [('who', 'WP'), ('is', 'VBZ'), ('john', 'NN'), ('?', '.')]
@@ -29,6 +30,7 @@ class Brain(object):
 		self.retorts = retorts
 		self.fallback = fallback
 		self.topics = []
+		self.quoter = Quoter()
 		setBrevity(brief)
 		if ear:
 			self.ear = listen(self)
@@ -39,7 +41,10 @@ class Brain(object):
 		sentence = sentence.lower()
 		tagged = tag(sentence)
 		opinion = self.opinion(sentence)
-		if opinion:
+		quote = self.quote(sentence)
+		if quote:
+			return say(quote)
+		elif opinion:
 			return say(opinion)
 		elif tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
@@ -48,6 +53,18 @@ class Brain(object):
 			return say(self.pinfo(subject=subject))
 		else:
 			return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+
+	def quote(self, topic=None, author=None):
+		q = self.quoter.quote(topic, author or self.name)
+		if q:
+			print(q['author'], q['tag'], q['text'])
+			if q['author'] == self.name:
+				return q['text']
+			else:
+				a = q['author']
+				if a == 'Anonymous':
+					a = randphrase("anonymous")
+				return "%s %s %s"%(a, randphrase("claims"), q['text'])
 
 	def opinion(self, sentence):
 		for trigger in triggers["opinion"]:

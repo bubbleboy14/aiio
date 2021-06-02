@@ -189,6 +189,15 @@ phrases = {
 		"i dunno",
 		"i guess i just don't know",
 		"dude, i could care less"
+	],
+	"claims": [
+		"claims", "claimed", "says", "said", "once said", "famously asserted",
+		"believes", "believed", "thinks", "thought", "was sure",
+		"has stated", "wants us to think", "seems sure that"
+	],
+	"anonymous": [
+		"an unknown person", "someone wise", "someone thoughtful",
+		"an old friend", "a little bird i know", "an anonymous author"
 	]
 }
 

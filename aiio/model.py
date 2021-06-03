@@ -161,6 +161,10 @@ class Meaning(db.TimeStampedBase):
     definition = db.Text()
 
     def content(self):
+        if self.antonyms:
+            return "the opposite of %s"%(self.antonyms[random.randint(0, len(self.antonyms) - 1)].get().content(),)
+        if self.synonyms:
+            return self.synonyms[random.randint(0, len(self.synonyms) - 1)].get().content()
         if not self.definition:
             print("Meaning.content(): no definition!")
         return self.definition
@@ -198,10 +202,20 @@ class Person(Object): # who
     birth = db.ForeignKey(kind=Event)
     residence = db.ForeignKey(kind=Place)
 
+    def dline(self):
+        return random.choice(self.description.split(". "))
+
+    def qline(self):
+        return self.qualifiers and random.choice(self.qualifiers).get().content()
+
+    def iblock(self):
+        return self.description or self.summary or self.name
+
     def content(self):
-        return self.qualifiers and random.choice(self.qualifiers).get().content() or self.summary or self.description or self.name
+        return self.qline() or self.dline() or self.iblock()
 
     def opinion(self, topic): # topic already lowercase
+        print("opinion", topic)
         # do this better -- single query would be ideal
         oz = Opinion.query(Opinion.person == self.key).all()
         pk = Phrase.query(Phrase.key.in_([o.phrase for o in oz]),
@@ -211,10 +225,15 @@ class Person(Object): # who
             for sent in sents:
                 if topic in sent.lower():
                     return sent
+        p = Person.query(Person.name == topic).get()
+        if p:
+            paz = self.assessment(p)
+            if paz:
+                return paz
         # split up!
         if " " in topic:
             tz = topic.split(" ")
-            tz.sort(lambda a, b: len(a) < len(b) and 1 or -1)
+            tz.sort(key = lambda a : -len(a))
             for part in tz:
                 op = self.opinion(stem(part, True))
                 if op:
@@ -222,8 +241,9 @@ class Person(Object): # who
 
     # version 1 (current): use util words directly
     # version 2 (future) : check synonyms/forms
-    def _scan(self, words):
-        sentences = nltk.sent_tokenize(self.description)
+    def _scan(self, words, person=None):
+        sentences = nltk.sent_tokenize((person or self).iblock())
+        random.shuffle(sentences)
         hits = []
         for sentence in sentences:
             for word in words:
@@ -237,12 +257,12 @@ class Person(Object): # who
             asps[asp] = self._scan(words)
         return asps
 
-    def assessment(self):
+    def assessment(self, person=None):
         for pers, words in util.personalities:
-            hits = self._scan(words)
+            hits = self._scan(words, person)
             if hits:
-                return "%s. %s is a %s."%(speak.truncate(random.choice(hits)),
-                    self.name, pers)
+                return "%s - %s is a %s."%(speak.truncate(random.choice(hits)),
+                    (person or self).name, pers)
 
 class Thing(Object): # what
     purpose = db.ForeignKey(kind=Idea)

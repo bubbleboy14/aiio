@@ -76,9 +76,17 @@ class Brain(object):
 					return assessment
 				if self.topics:
 					random.shuffle(self.topics)
-					return "%s. %s %s."%(randphrase("ambivalent"),
+					return "%s. %s %s..."%(randphrase("ambivalent"),
 						randphrase("redirect"), self.topics.pop())
-				return randphrase("ambivalent")
+				sub = Person.query(Person.name == subject).get()
+				if sub:
+					return self.identity().assessment(sub) or self.meh(sub)
+				sub = Word.query(Word.word == subject).get() or Phrase.query(Phrase.phrase == subject).get()
+				if sub:
+					return self.meh(sub.meaning().content())
+
+	def meh(self, subject):
+		return "%s - %s"%(subject.content(), randphrase("ambivalent"))
 
 	def pinfo(self, person=None, subject=None):
 		if not person:

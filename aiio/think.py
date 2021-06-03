@@ -86,14 +86,20 @@ def assess(subject, identity=None):
 	if az:
 		return az
 	info = person.info()
-	for creation in info["creations"]:
-		for value, words in values.items():
-			for word in words:
-				if word in creation:
-					return "%s %s"%(speak.truncate(creation), randphrase(value))
+	cresp = evaluate(info["creations"])
+	if cresp:
+		return cresp
 	for aspect in ["opinions", "attractions", "aversions"]:
 		if info[aspect]:
 			return random.choice(info[aspect])
+	return evaluate(person.description.split(". "))
+
+def evaluate(phrases):
+	for phrase in phrases:
+		for value, words in values.items():
+			for word in words:
+				if word in phrase:
+					return "%s - %s"%(speak.truncate(phrase), randphrase(value))
 
 def meaning(q, a):
 	m = Meaning(synonyms=[wordorphrase(q).key], definition=a)
@@ -107,25 +113,25 @@ def question(q):
 def wsum(name):
 	print("checking wikipedia for", name)
 	try:
-		return wikipedia.summary(name)
+		return wikipedia.summary(name).replace("\n", " ")
 	except wikipedia.DisambiguationError as e:
 		return wikipedia.summary(str(e).split("\n")[1])
 	except Exception:
-		return None
+		return ""
 
 def dsum(name):
 	print("checking duckduckgo for", name)
-	return duckduckpy.query(name).abstract
+	return duckduckpy.query(name).abstract.replace("\n", " ")
 
 def summy(name):
-	return dsum(name) or wsum(name)
+	return "%s %s"%(dsum(name), wsum(name))
 
 def research(entity):
 	summary = summy(entity.name)
 	if summary:
 		entity.description = summary
 		entity.summary = speak.truncate(summary)
-		entity.qualifiers = [phrase(p).key for p in entity.summary.split(". ")]
+		entity.qualifiers = [phrase(p.strip()).key for p in entity.summary.split(". ")]
 	else:
 		print("thing.research() FAILED for", entity)
 

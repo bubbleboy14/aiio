@@ -1,4 +1,4 @@
-import random
+import random, string
 from model import *
 from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
 from .util import triggers, randphrase
@@ -69,7 +69,7 @@ class Brain(object):
 	def opinion(self, sentence):
 		for trigger in triggers["opinion"]:
 			if sentence.startswith(trigger):
-				subject = sentence[len(trigger) + 1:]
+				subject = sentence[len(trigger) + 1:].strip(string.punctuation)
 				assessment = assess(subject, self.identity())
 				if assessment:
 					self.topics.append(subject)

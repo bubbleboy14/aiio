@@ -4,10 +4,12 @@ triggers = {
 	"opinion": [
 		"what do you think of",
 		"what do you think about",
+		"what do you know about",
 		"what are your thoughts on",
 		"what's your take on",
 		"how do you feel about",
 		"what's your opinion of",
+		"what about",
 		"do you like"
 	]
 }

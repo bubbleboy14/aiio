@@ -5,10 +5,13 @@ triggers = {
 		"what do you think of",
 		"what do you think about",
 		"what do you know about",
+		"what can you tell me about",
 		"what are your thoughts on",
 		"what's your take on",
 		"how do you feel about",
 		"what's your opinion of",
+		"have you heard about",
+		"have you heard of",
 		"what about",
 		"do you like"
 	]
@@ -48,7 +51,7 @@ values = {
 
 personalities = [ # ordered by intensity
 	["monster", [
-		"murdered", "invaded", "terrorized", "tortured"
+		"murdered", "invaded", "terrorized", "tortured", "abused"
 	]],
 	["psycho", [
 		"misled", "duped", "tricked", "attacked", "killed", "violated"
@@ -114,10 +117,14 @@ phrases = {
 		"that's what's up.",
 		"heck yeah!",
 		"awesome."
+		"sounds good to me!",
+		"that's fantastic!"
 	],
 	"bad": [
+		"how sad.",
+		"it's appalling.",
 		"that sucks.",
-		"laaaaaaaaaame.",
+		"how awful.",
 		"that's wack.",
 		"that's rough.",
 		"pretty evil, right?",
@@ -189,6 +196,7 @@ phrases = {
 	"ambivalent": [
 		"eh, no strong opinion",
 		"i dunno",
+		"i don't care dude, do you?",
 		"i guess i just don't know",
 		"dude, i could care less"
 	],

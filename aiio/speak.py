@@ -27,6 +27,10 @@ def say(phrase):
 		print("speak.say(): no phrase!")
 		return
 	if BRIEF and len(phrase) > 200:
-		phrase = truncate(phrase)
+		if " - " in phrase:
+			[phrase, tail] = phrase.rsplit(" - ", 1)
+			phrase = "%s - %s"%(truncate(phrase), tail)
+		else:
+			phrase = truncate(phrase)
 	return phrase
 #	cmd('espeak "%s"'%(phrase,))

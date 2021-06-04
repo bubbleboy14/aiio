@@ -51,22 +51,28 @@ values = {
 
 personalities = [ # ordered by intensity
 	["monster", [
-		"murdered", "invaded", "terrorized", "tortured", "abused"
+		"murdered", "invaded", "terrorized", "tortured", "abused", "enslaved", "raped"
 	]],
 	["psycho", [
-		"misled", "duped", "tricked", "attacked", "killed", "violated"
+		"killed", "kidnapped", "abducted", "groomed", "procured", "molested", "maimed"
+	]],
+	["villain", [
+		"attacked", "harassed", "violated", "cheated", "perjured", "oppressed"
+	]],
+	["scammer", [
+		"misled", "duped", "tricked", "defrauded", "embezzled", "stole", "lied"
 	]],
 	["hero", [
-		"saved", "rescued"
+		"saved", "rescued", "liberated", "freed", "emancipated", "rebuilt"
 	]],
 	["genius", [
-		"invented", "discovered", "developed", "pioneered"
+		"invented", "discovered", "developed", "pioneered", "revolutionized", "patented"
 	]],
 	["jerk", [
-		"hurt", "harmed", "injured"
+		"hurt", "harmed", "injured", "damaged", "ruined"
 	]],
 	["homie", [
-		"helped", "supported", "assisted"
+		"helped", "supported", "assisted", "restored", "beautified", "revitalized", "donated"
 	]]
 ]
 
@@ -173,6 +179,7 @@ phrases = {
 		"i'm not sure",
 		"it's hard to say",
 		"ummm..",
+		"do i look like i have all the answers?",
 		"you ask a lot of questions"
 	],
 	"exhausted": [

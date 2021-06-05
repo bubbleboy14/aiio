@@ -5,6 +5,7 @@ class Quoter(object):
 	def __init__(self):
 		self.authors = {}
 		self.tags = {}
+		self.cooldown = []
 		self.load()
 
 	def respond(self, topic, author=None):
@@ -36,9 +37,13 @@ class Quoter(object):
 						tier3.append(quote)
 						if topic in quote['text']:
 							tier2.append(quote)
-		options = tier1 or tier2 or tier3
+		options = list(filter(lambda i : i not in self.cooldown, tier1 or tier2 or tier3))
 		if options:
-			return random.choice(options)
+			sel = random.choice(options)
+			if sel:
+				self.cooldown.append(sel)
+				self.cooldown = self.cooldown[-4:]
+				return sel
 
 	def load(self):
 		for quote in raw_quotes:

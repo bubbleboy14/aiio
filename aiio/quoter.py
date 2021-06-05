@@ -7,23 +7,36 @@ class Quoter(object):
 		self.tags = {}
 		self.load()
 
-	def quote(self, topic=None, author=None):
-		options = []
+	def respond(self, topic, author=None):
+		words = topic.split(" ")
+		words.sort(key = lambda a : -len(a))
+		resp = self.quote(topic, author, True)
+		if resp:
+			return resp
+		for word in words:
+			resp = self.quote(topic, author, True)
+			if resp:
+				return resp
+		return self.quote(topic, author)
+
+	def quote(self, topic=None, author=None, t1only=False):
+		tier1 = []
 		tier2 = []
+		tier3 = []
 		if author:
 			if author in self.authors:
 				for quote in self.authors[author]:
 					tier2.append(quote)
 					if quote['tag'] in topic or topic in quote['text']:
-						options.append(quote)
-		if topic:
+						tier1.append(quote)
+		if topic and not t1only:
 			for tag in self.tags:
 				if tag in topic:
 					for quote in self.tags[tag]:
-						tier2.append(quote)
+						tier3.append(quote)
 						if topic in quote['text']:
-							options.append(quote)
-		options = options or tier2
+							tier2.append(quote)
+		options = tier1 or tier2 or tier3
 		if options:
 			return random.choice(options)
 

@@ -40,22 +40,21 @@ class Brain(object):
 			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()
 		tagged = tag(sentence)
-		opinion = self.opinion(sentence)
 		quote = self.quote(sentence)
 		if quote:
 			return say(quote)
-		elif opinion:
+		opinion = self.opinion(sentence)
+		if opinion:
 			return say(opinion)
-		elif tagged[0][1] in ["WP", "WRB"]:
+		if tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
-		elif sentence.startswith("tell me"):
+		if sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			return say(self.pinfo(subject=subject))
-		else:
-			return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+		return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
 
 	def quote(self, topic=None, author=None):
-		q = self.quoter.quote(topic, author or self.name)
+		q = self.quoter.respond(topic, (author or self.name).title())
 		if q:
 			print(q['author'], q['tag'], q['text'])
 			if q['author'] == self.name:

@@ -115,7 +115,10 @@ def wsum(name):
 	try:
 		return wikipedia.summary(name).replace("\n", " ")
 	except wikipedia.DisambiguationError as e:
-		return wikipedia.summary(str(e).split("\n")[1])
+		try:
+			return wikipedia.summary(str(e).split("\n")[1])
+		except wikipedia.DisambiguationError as e:
+			return "" # right? would be nice to indicate the term is too ambiguous...
 	except Exception:
 		return ""
 

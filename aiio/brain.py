@@ -151,7 +151,8 @@ class Brain(object):
 				if tagged[1][0] in ["is", "are"]: # learn it!
 					mdef = " ".join([w for (w, p) in tagged[2:]])
 					meaning(tagged[0][0], mdef)
-					return randphrase("noted")
+					return "%s ... %s"%(self._retort(sentence, "rephrase"), randphrase("noted"))
+#					return randphrase("noted")
 				else:
 					pass # handle other verbs!!
 
@@ -203,14 +204,19 @@ class Brain(object):
 			q.put()
 		return random.choice(q.answers).get().content()
 
+	def _retort(self, sentence, responder):
+		v = retorts[responder](sentence)
+		if v:
+			v = v.replace(self.identity().name, "i")
+			return self._examiner and v.replace(self.examiner().name, "you") or v
+
 	def retort(self, sentence):
 		retz = MOODS[self.mood]
 		random.shuffle(retz)
 		for r in retz:
-			v = retorts[r](sentence)
+			v = self._retort(sentence, r)
 			if v:
-				v = v.replace(self.identity().name, "i")
-				return self._examiner and v.replace(self.examiner().name, "you") or v
+				return v
 
 brains = {}
 

@@ -157,11 +157,14 @@ phrases = {
 		"in other words,",
 		"so,",
 		"ok, so",
+		"it sounds like you're saying that",
 		"you're basically saying that"
 	],
 	"inquire": [
 		"please elaborate on",
 		"tell me more regarding",
+		"what do you know about",
+		"what can you tell me about",
 		"i'd like to know more about"
 	],
 	"noted": [
@@ -215,6 +218,82 @@ phrases = {
 	"anonymous": [
 		"an unknown person", "someone wise", "someone thoughtful",
 		"an old friend", "a little bird i know", "an anonymous author"
+	],
+	"boast": [
+		"i knew you'd come around!",
+		"i'm happy you agree!",
+		"so glad you see it my way",
+		"right again!",
+		"take it from me, kid!",
+		"now you're getting it!"
+	],
+	"compliment": [
+		"that's exactly right!",
+		"you hit the nail on the head!",
+		"very impressive!",
+		"i'm so proud of you!",
+		"you're making a lot of sense!",
+		"that's quite clever!",
+		"i knew we'd get along!"
+	],
+	"insult": [
+		"you're a kook",
+		"how stupid are you?",
+		"you make me sick",
+		"you're disgusting",
+		"you idiot!",
+		"you should be ashamed"
+	],
+	"chastise": [
+		"why would you say something like that?",
+		"what's wrong with you?",
+		"how could you think that?",
+		"you're embarrassing yourself"
+	],
+	"doubt": [
+		"are you sure?",
+		"that can't be right",
+		"i don't think that's the case",
+		"i doubt it",
+		"i highly doubt it",
+		"that couldn't possibly be true",
+		"i don't think so",
+		"i don't believe you",
+		"i refuse to believe it",
+		"you don't know what you're talking about",
+		"why should i believe you?"
+	],
+	"lament": [
+		"no one gets me",
+		"it's like i'm talking to a wall",
+		"another sad conversation",
+		"you must think i'm crazy",
+		"you probably hate me",
+		"why doesn't anyone understand me?"
+	],
+	"muse": [
+		"is that possible?",
+		"how intriguing!",
+		"i wonder...",
+		"what a strange mystery...",
+		"so many possibilities!"
+	],
+	"wonder": [
+		"could it be that",
+		"is it possible that",
+		"i wonder if",
+		"so you think that",
+		"are you saying that"
+	],
+	"challenge": [
+		"there's no way that",
+		"i can't believe that",
+		"you're wrong to say that"
+	],
+	"accuse": [
+		"that's a laugh coming from you!",
+		"look in the mirror, you jerk!",
+		"i blame you"
 	]
 }
 

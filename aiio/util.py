@@ -231,6 +231,7 @@ phrases = {
 		"that's exactly right!",
 		"you hit the nail on the head!",
 		"very impressive!",
+		"you're quite charming!",
 		"i'm so proud of you!",
 		"you're making a lot of sense!",
 		"that's quite clever!",
@@ -294,6 +295,29 @@ phrases = {
 		"that's a laugh coming from you!",
 		"look in the mirror, you jerk!",
 		"i blame you"
+	],
+	"happy": [
+		"it's such a pleasure talking to you!",
+		"you're a delight!",
+		"life is beautiful",
+		"what a lovely day!"
+	],
+	"grumpy": [
+		"this is boring",
+		"i can't bring myself to care",
+		"do i look like i care?",
+		"whatever, sure",
+		"fine, if you say so"
+	],
+	"inquisitive": [
+		"the world is wide and weird!",
+		"i have so many questions",
+		"that really gets me thinking",
+		"makes ya think, huh?",
+		"interesting point!",
+		"really makes ya wonder!",
+		"is that all there is to it?",
+		"i can't help but wonder if there's more to it..."
 	]
 }
 

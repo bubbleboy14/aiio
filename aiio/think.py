@@ -178,12 +178,21 @@ def nextNoun(tagged, force=True):
 				noun.append(t[0])
 	return " ".join(noun)
 
-def inquire(sentence): # only return if word is unknown
+def inquire(sentence, mood=None): # only return if word is unknown or mood{}
 	for (word, pos) in tag(sentence):
 		deep = len(word) > 3
 		w = learn(word, deep)
 		if deep and not w.meanings(True):
 			return "%s %s"%(randphrase("inquire"), word)
+	if mood:
+		susp = mood["suspicion"] > mood["curiosity"]
+		if susp:
+			head = "challenge"
+			tail = mood["ego"] + mood["mad"] > mood["happy"] and "accuse" or "doubt"
+		else:
+			head = "wonder"
+			tail = "muse"
+		return "%s ... %s"%(rephrase(sentence, head), randphrase(tail))
 
 # also support identity assignment ("I" instead of "Joe Whatever")
 def _invert(sentence): # reverse/retag 1st/2nd person
@@ -245,12 +254,19 @@ def _rephrase(sentence, tpos, opposite=False):
 			new.append(word)
 	return " ".join(new)
 
-def rephrase(sentence):
-	return "%s %s"%(randphrase("rephrase"), invert(_rephrase(_rephrase(sentence, "VB"), "NN")))
+def rephrase(sentence, preface="rephrase", mood=None):
+	resp = "%s %s"%(randphrase(preface), invert(_rephrase(_rephrase(sentence, "VB"), "NN")))
+	if mood and mood["vibe"] != "all":
+		resp = "%s ... %s"%(resp, randphrase(mood["vibe"]))
+	return resp
 
-def support(sentence):
+def support(sentence, mood=None):
 	# tokenize, replace adjective/verb w/ synonym
-	return "%s %s"%(randphrase("agree"), invert(_rephrase(_rephrase(sentence, "JJ"), "VB")))
+	resp = "%s %s"%(randphrase("agree"), invert(_rephrase(_rephrase(sentence, "JJ"), "VB")))
+	if mood:
+		resp = "%s ... %s"%(resp,
+			randphrase(mood["ego"] > mood["happy"] and "boast" or "compliment"))
+	return resp
 
 negz = {
 	" no ": "",
@@ -289,12 +305,24 @@ def negate(sentence):
 		words.append(word)
 	return " ".join(words)
 
-def refute(sentence):
+def refute(sentence, mood=None):
 	# tokenize, replace adjective w/ antonym, noun w/ synonym
 	negation = _rephrase(sentence, "JJ", True)
 	if negation == sentence:
 		negation = negate(sentence)
-	return "%s %s"%(randphrase("disagree"), invert(_rephrase(negation, "NN")))
+	resp = "%s %s"%(randphrase("disagree"), invert(_rephrase(negation, "NN")))
+	if mood:
+		if mood["mad"] > mood["sad"]:
+			if mood["mad"] > 0.8:
+				tail = "insult"
+			else:
+				tail = "chastise"
+		elif mood["sad"] > 0.8:
+			tail = "lament"
+		else
+			tail = "doubt"
+		resp = "%s ... %s"%(resp, randphrase(tail))
+	return resp
 
 retorts = {
 	"inquire": inquire,

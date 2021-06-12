@@ -272,6 +272,9 @@ phrases = {
 		"poppycock!",
 		"what a pile of rubbish!",
 		"sounds very unlikely!",
+		"hah, that's rich!",
+		"a likely story!",
+		"that's preposterous",
 		"did you hear that from alex jones?",
 		"sure, and i'm the queen of england!"
 	],

@@ -178,11 +178,16 @@ phrases = {
 		"i'm not sure what you mean",
 		"i don't get it"
 	],
+	"next": [
+		"what else is new?",
+		"how have you been?",
+		"how are things besides that?"
+	],
 	"unsure": [
 		"i'm not sure",
 		"it's hard to say",
 		"ummm..",
-		"do i look like i have all the answers?",
+		"i don't have all the answers",
 		"you ask a lot of questions"
 	],
 	"exhausted": [

@@ -35,18 +35,24 @@ inquisitive : curiosity + suspicion
 """
 
 class Brain(object):
-	def __init__(self, name, vibe="all", mood=None, ear=False, retorts=True, fallback=False, brief=True):
+	def __init__(self, name, vibe="all", mood=None, options=None, ear=False):
 		self.name = name
 		self._identity = identify(name).key
 		self.opinionate()
 		self._examiner = None
 		self.vibe = vibe == "random" and random.choice(VIBES.keys()) or vibe
 		self.mood = mood
-		self.retorts = retorts
-		self.fallback = fallback
+		mood and self.setMood(mood)
+		self.options = {
+			"quote": True,
+			"opinion": True,
+			"retort": True,
+			"fallback": True,
+			"brief": True
+		}
+		options and self.setOptions(options)
 		self.topics = []
 		self.quoter = Quoter()
-		setBrevity(brief)
 		if ear:
 			self.ear = listen(self)
 
@@ -55,18 +61,12 @@ class Brain(object):
 			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()
 		tagged = tag(sentence)
-		quote = self.quote(sentence)
-		if quote:
-			return say(quote)
-		opinion = self.opinion(sentence)
-		if opinion:
-			return say(opinion)
 		if tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
 		if sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			return say(self.pinfo(subject=subject))
-		return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+		return say(self.ingest(sentence) or self.process(sentence))
 
 	def setMood(self, mood, upvibe=True):
 		self.mood = mood
@@ -84,6 +84,22 @@ class Brain(object):
 				self.vibe = vec
 		self.mood["vibe"] = self.vibe
 		print("setMood() - vibe:", self.vibe)
+
+	def setOptions(self, options):
+		for option in self.options: # enforce keyset
+			if option in options:
+				self.options[option] = options[option]
+		setBrevity(self.options["brief"])
+
+	def process(self, sentence):
+		for option in ["quote", "opinion", "retort", "fallback"]:
+			if self.options[option]:
+				val = getattr(self, option)(sentence)
+				if val:
+					return val
+
+	def fallback(self, sentence):
+		return "%s. %s"%(randphrase("unsure"), randphrase("next"))
 
 	def quote(self, topic=None, author=None):
 		q = self.quoter.respond(topic, (author or self.name).title())
@@ -252,9 +268,14 @@ class Brain(object):
 
 brains = {}
 
-def getBrain(name=None, vibe="all", mood=None, ear=False, retorts=True, fallback=False):
+def getBrain(name=None, vibe="all", mood=None, options=None, ear=False):
 	if name not in brains:
-		brains[name] = Brain(name, vibe, mood, ear, retorts, fallback)
-	if mood:
-		brains[name].setMood(mood)
+		brains[name] = Brain(name, vibe, mood, options, ear)
+	else:
+		if options:
+			brains[name].setOptions(options)
+		if mood:
+			brains[name].setMood(mood)
+		elif vibe:
+			brains[name].vibe = vibe
 	return brains[name]

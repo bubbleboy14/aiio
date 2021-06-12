@@ -262,7 +262,9 @@ phrases = {
 		"i don't believe you",
 		"i refuse to believe it",
 		"you don't know what you're talking about",
-		"why should i believe you?"
+		"why should i believe you?",
+		"that doesn't pass the sniff test",
+		"doesn't add up"
 	],
 	"lament": [
 		"no one gets me",

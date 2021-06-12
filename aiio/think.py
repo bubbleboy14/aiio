@@ -319,7 +319,7 @@ def refute(sentence, mood=None):
 				tail = "chastise"
 		elif mood["sad"] > 0.8:
 			tail = "lament"
-		else
+		else:
 			tail = "doubt"
 		resp = "%s ... %s"%(resp, randphrase(tail))
 	return resp

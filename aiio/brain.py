@@ -13,20 +13,35 @@ from .quoter import Quoter
 [('i', 'NN'), ('am', 'VBP'), ('mario', 'NN')]
 """
 
-MOODS = {
+VIBES = {
 	"all": ["inquire", "rephrase", "support", "refute"],
-	"happy": ["support"],
+	"happy": ["support", "rephrase"],
 	"grumpy": ["refute"],
 	"inquisitive": ["inquire", "rephrase"]
 }
 
+"""
+vu: mad, happy, sad, ego, suspicion, curiosity
+
+happy : happy + ego
+  ego : boast
+  happy : compliment
+grumpy : mad + sad
+  mad : insult, chastise
+  sad : doubt, lament
+inquisitive : curiosity + suspicion
+  curiosity : muse, wonder
+  suspicion : challenge, doubt, accuse
+"""
+
 class Brain(object):
-	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False, brief=True):
+	def __init__(self, name, vibe="all", mood=None, ear=False, retorts=True, fallback=False, brief=True):
 		self.name = name
 		self._identity = identify(name).key
 		self.opinionate()
 		self._examiner = None
-		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
+		self.vibe = vibe == "random" and random.choice(VIBES.keys()) or vibe
+		self.mood = mood
 		self.retorts = retorts
 		self.fallback = fallback
 		self.topics = []
@@ -52,6 +67,23 @@ class Brain(object):
 			subject = sentence.split(" about ")[1]
 			return say(self.pinfo(subject=subject))
 		return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+
+	def setMood(self, mood, upvibe=True):
+		self.mood = mood
+		if not upvibe:
+			return
+		vecs = {
+			"happy": mood["happy"] + mood["ego"] + 0.5,
+			"grumpy": mood["mad"] + mood["sad"] + 1,
+			"inquisitive": mood["curiosity"] + mood["suspicion"]
+		}
+		half = (vecs["happy"] + vecs["grumpy"] + vecs["inquisitive"]) / 2.0
+		self.vibe = "all"
+		for vec in vecs:
+			if vecs[vec] >= half:
+				self.vibe = vec
+		self.mood["vibe"] = self.vibe
+		print("setMood() - vibe:", self.vibe)
 
 	def quote(self, topic=None, author=None):
 		q = self.quoter.respond(topic, (author or self.name).title())
@@ -205,13 +237,13 @@ class Brain(object):
 		return random.choice(q.answers).get().content()
 
 	def _retort(self, sentence, responder):
-		v = retorts[responder](sentence)
+		v = retorts[responder](sentence, mood=self.mood)
 		if v:
 			v = v.replace(self.identity().name, "i")
 			return self._examiner and v.replace(self.examiner().name, "you") or v
 
 	def retort(self, sentence):
-		retz = MOODS[self.mood]
+		retz = VIBES[self.vibe]
 		random.shuffle(retz)
 		for r in retz:
 			v = self._retort(sentence, r)
@@ -220,8 +252,9 @@ class Brain(object):
 
 brains = {}
 
-def getBrain(name=None, mood="all", ear=False, retorts=True, fallback=False):
-	if name in brains:
-		return brains[name]
-	brains[name] = Brain(name, mood, ear, retorts, fallback)
+def getBrain(name=None, vibe="all", mood=None, ear=False, retorts=True, fallback=False):
+	if name not in brains:
+		brains[name] = Brain(name, vibe, mood, ear, retorts, fallback)
+	if mood:
+		brains[name].setMood(mood)
 	return brains[name]

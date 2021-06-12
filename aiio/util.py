@@ -264,7 +264,11 @@ phrases = {
 		"you don't know what you're talking about",
 		"why should i believe you?",
 		"that doesn't pass the sniff test",
-		"doesn't add up"
+		"doesn't add up",
+		"that doesn't seem credible",
+		"where did you hear that?",
+		"sounds like fake news",
+		"yeah right!"
 	],
 	"lament": [
 		"no one gets me",

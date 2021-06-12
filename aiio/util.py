@@ -268,7 +268,12 @@ phrases = {
 		"that doesn't seem credible",
 		"where did you hear that?",
 		"sounds like fake news",
-		"yeah right!"
+		"yeah right!",
+		"poppycock!",
+		"what a pile of rubbish!",
+		"sounds very unlikely!",
+		"did you hear that from alex jones?",
+		"sure, and i'm the queen of england!"
 	],
 	"lament": [
 		"no one gets me",

@@ -1,7 +1,7 @@
 import random, string
 from model import *
 from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
-from .util import triggers, randphrase
+from .util import triggers, randphrase, randfeel
 from .hear import listen
 from .speak import say, setBrevity
 from .quoter import Quoter
@@ -113,24 +113,29 @@ class Brain(object):
 					a = randphrase("anonymous")
 				return "%s %s %s"%(a, randphrase("claims"), q['text'])
 
+	def _opinion(self, subject):
+		assessment = assess(subject, self.identity())
+		if assessment:
+			self.topics.append(subject)
+			return assessment
+		if self.topics:
+			random.shuffle(self.topics)
+			return "%s. %s %s..."%(randphrase("ambivalent"),
+				randphrase("redirect"), self.topics.pop())
+		sub = Person.query(Person.name == subject).get()
+		if sub:
+			return self.identity().assessment(sub) or self.meh(sub)
+		sub = Word.query(Word.word == subject).get() or Phrase.query(Phrase.phrase == subject).get()
+		if sub:
+			return self.meh(sub.meaning())
+
 	def opinion(self, sentence):
 		for trigger in triggers["opinion"]:
 			if sentence.startswith(trigger):
 				subject = sentence[len(trigger) + 1:].strip(string.punctuation)
-				assessment = assess(subject, self.identity())
-				if assessment:
-					self.topics.append(subject)
-					return assessment
-				if self.topics:
-					random.shuffle(self.topics)
-					return "%s. %s %s..."%(randphrase("ambivalent"),
-						randphrase("redirect"), self.topics.pop())
-				sub = Person.query(Person.name == subject).get()
-				if sub:
-					return self.identity().assessment(sub) or self.meh(sub)
-				sub = Word.query(Word.word == subject).get() or Phrase.query(Phrase.phrase == subject).get()
-				if sub:
-					return self.meh(sub.meaning().content())
+				op = self._opinion(subject)
+				if op:
+					return op
 
 	def meh(self, subject):
 		return "%s - %s"%(subject.content(), randphrase("ambivalent"))
@@ -247,10 +252,46 @@ class Brain(object):
 				return randphrase("exhausted",
 					"nevermind the whys and wherefores!") # placeholder
 				# TODO: first check reason. then... something?
+			elif tagged[0][0] == "how":
+				if tagged[2][0] == "you":
+					if " about " in sentence:
+						op = self._opinion(sentence.split(" about ")[1])
+						if op:
+							return op
+					if len(tagged) > 3 and tagged[3][0] in ["know", "determine", "ensure", "believe"]:
+						return "%s %s"%(randphrase("i don't"), sentence[4:])
+#					if tagged[3][0] in ["feel", "feeling", "doing", "been"]:
+					return self._feeling()
 			else: # when/why: yahoo answers api?
 				return randphrase("what")
 			q.put()
 		return random.choice(q.answers).get().content()
+
+	def _feeling(self):
+		if self.vibe == "happy":
+			return "%s %s"%(randfeel("happy"), randphrase("happy"))
+		if self.vibe == "grumpy":
+			grump = randphrase("grumpy")
+			if self.mood:
+				if self.mood["mad"] > self.mood["sad"]:
+					return "%s %s"%(grump, randfeel("mad"))
+				else:
+					return "%s %s"%(grump, randfeel("sad"))
+			return grump
+		if self.vibe == "inquisitive":
+			inq = randphrase("inquisitive")
+			if self.mood:
+				if self.mood["curiosity"] > self.mood["suspicion"]:
+					return "%s %s"%(randfeel("curiosity"), inq)
+				else:
+					return "%s %s"%(randfeel("suspicion"), inq)
+			return "%s %s"%(randphrase("who knows"), inq)
+		if self.mood:
+			if self.mood["energy"] > 0.6:
+				return randfeel("amped")
+			elif self.mood["energy"] < 0.4:
+				return randfeel("tired")
+		return randfeel("soso")
 
 	def _retort(self, sentence, responder):
 		v = retorts[responder](sentence, mood=self.mood)

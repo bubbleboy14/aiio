@@ -61,12 +61,19 @@ class Brain(object):
 			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()
 		tagged = tag(sentence)
+		resp = self.process(sentence)
+		if resp:
+			return say(resp)
 		if tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
 		if sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			return say(self.pinfo(subject=subject))
-		return say(self.ingest(sentence) or self.process(sentence))
+		resp = self.ingest(sentence)
+		if resp:
+			return say(resp)
+		if self.options["fallback"]:
+			return say(self.fallback())
 
 	def setMood(self, mood, upvibe=True):
 		self.mood = mood
@@ -92,13 +99,14 @@ class Brain(object):
 		setBrevity(self.options["brief"])
 
 	def process(self, sentence):
-		for option in ["quote", "opinion", "retort", "fallback"]:
+		for option in ["quote", "opinion", "retort"]:
 			if self.options[option]:
+				print("checking", option)
 				val = getattr(self, option)(sentence)
 				if val:
 					return val
 
-	def fallback(self, sentence):
+	def fallback(self, sentence=None):
 		return "%s. %s"%(randphrase("unsure"), randphrase("next"))
 
 	def quote(self, topic=None, author=None):

@@ -1,7 +1,7 @@
 import random, string
 from model import *
 from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
-from .util import triggers, randphrase
+from .util import triggers, randphrase, randfeel
 from .hear import listen
 from .speak import say, setBrevity
 from .quoter import Quoter
@@ -13,25 +13,46 @@ from .quoter import Quoter
 [('i', 'NN'), ('am', 'VBP'), ('mario', 'NN')]
 """
 
-MOODS = {
+VIBES = {
 	"all": ["inquire", "rephrase", "support", "refute"],
-	"happy": ["support"],
+	"happy": ["support", "rephrase"],
 	"grumpy": ["refute"],
 	"inquisitive": ["inquire", "rephrase"]
 }
 
+"""
+vu: mad, happy, sad, ego, suspicion, curiosity
+
+happy : happy + ego
+  ego : boast
+  happy : compliment
+grumpy : mad + sad
+  mad : insult, chastise
+  sad : doubt, lament
+inquisitive : curiosity + suspicion
+  curiosity : muse, wonder
+  suspicion : challenge, doubt, accuse
+"""
+
 class Brain(object):
-	def __init__(self, name, mood="all", ear=False, retorts=True, fallback=False, brief=True):
+	def __init__(self, name, vibe="all", mood=None, options=None, ear=False):
 		self.name = name
 		self._identity = identify(name).key
 		self.opinionate()
 		self._examiner = None
-		self.mood = mood == "random" and random.choice(MOODS.keys()) or mood
-		self.retorts = retorts
-		self.fallback = fallback
+		self.vibe = vibe == "random" and random.choice(VIBES.keys()) or vibe
+		self.mood = mood
+		mood and self.setMood(mood)
+		self.options = {
+			"quote": True,
+			"opinion": True,
+			"retort": True,
+			"fallback": True,
+			"brief": True
+		}
+		options and self.setOptions(options)
 		self.topics = []
 		self.quoter = Quoter()
-		setBrevity(brief)
 		if ear:
 			self.ear = listen(self)
 
@@ -40,18 +61,53 @@ class Brain(object):
 			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()
 		tagged = tag(sentence)
-		quote = self.quote(sentence)
-		if quote:
-			return say(quote)
-		opinion = self.opinion(sentence)
-		if opinion:
-			return say(opinion)
+		resp = self.process(sentence)
+		if resp:
+			return say(resp)
 		if tagged[0][1] in ["WP", "WRB"]:
 			return say(self.answer(sentence))
 		if sentence.startswith("tell me"):
 			subject = sentence.split(" about ")[1]
 			return say(self.pinfo(subject=subject))
-		return say(self.ingest(sentence) or (self.retorts and self.retort(sentence)) or (self.fallback and randphrase("unsure")))
+		resp = self.ingest(sentence)
+		if resp:
+			return say(resp)
+		if self.options["fallback"]:
+			return say(self.fallback())
+
+	def setMood(self, mood, upvibe=True):
+		self.mood = mood
+		if not upvibe:
+			return
+		vecs = {
+			"happy": mood["happy"] + mood["ego"] + 0.5,
+			"grumpy": mood["mad"] + mood["sad"] + 1,
+			"inquisitive": mood["curiosity"] + mood["suspicion"]
+		}
+		half = (vecs["happy"] + vecs["grumpy"] + vecs["inquisitive"]) / 2.0
+		self.vibe = "all"
+		for vec in vecs:
+			if vecs[vec] >= half:
+				self.vibe = vec
+		self.mood["vibe"] = self.vibe
+		print("setMood() - vibe:", self.vibe)
+
+	def setOptions(self, options):
+		for option in self.options: # enforce keyset
+			if option in options:
+				self.options[option] = options[option]
+		setBrevity(self.options["brief"])
+
+	def process(self, sentence):
+		for option in ["quote", "opinion", "retort"]:
+			if self.options[option]:
+				print("checking", option)
+				val = getattr(self, option)(sentence)
+				if val:
+					return val
+
+	def fallback(self, sentence=None):
+		return "%s. %s"%(randphrase("unsure"), randphrase("next"))
 
 	def quote(self, topic=None, author=None):
 		q = self.quoter.respond(topic, (author or self.name).title())
@@ -65,24 +121,29 @@ class Brain(object):
 					a = randphrase("anonymous")
 				return "%s %s %s"%(a, randphrase("claims"), q['text'])
 
+	def _opinion(self, subject):
+		assessment = assess(subject, self.identity())
+		if assessment:
+			self.topics.append(subject)
+			return assessment
+		if self.topics:
+			random.shuffle(self.topics)
+			return "%s. %s %s..."%(randphrase("ambivalent"),
+				randphrase("redirect"), self.topics.pop())
+		sub = Person.query(Person.name == subject).get()
+		if sub:
+			return self.identity().assessment(sub) or self.meh(sub)
+		sub = Word.query(Word.word == subject).get() or Phrase.query(Phrase.phrase == subject).get()
+		if sub:
+			return self.meh(sub.meaning())
+
 	def opinion(self, sentence):
 		for trigger in triggers["opinion"]:
 			if sentence.startswith(trigger):
 				subject = sentence[len(trigger) + 1:].strip(string.punctuation)
-				assessment = assess(subject, self.identity())
-				if assessment:
-					self.topics.append(subject)
-					return assessment
-				if self.topics:
-					random.shuffle(self.topics)
-					return "%s. %s %s..."%(randphrase("ambivalent"),
-						randphrase("redirect"), self.topics.pop())
-				sub = Person.query(Person.name == subject).get()
-				if sub:
-					return self.identity().assessment(sub) or self.meh(sub)
-				sub = Word.query(Word.word == subject).get() or Phrase.query(Phrase.phrase == subject).get()
-				if sub:
-					return self.meh(sub.meaning().content())
+				op = self._opinion(subject)
+				if op:
+					return op
 
 	def meh(self, subject):
 		return "%s - %s"%(subject.content(), randphrase("ambivalent"))
@@ -151,7 +212,8 @@ class Brain(object):
 				if tagged[1][0] in ["is", "are"]: # learn it!
 					mdef = " ".join([w for (w, p) in tagged[2:]])
 					meaning(tagged[0][0], mdef)
-					return randphrase("noted")
+					return "%s ... %s"%(self._retort(sentence, "rephrase"), randphrase("noted"))
+#					return randphrase("noted")
 				else:
 					pass # handle other verbs!!
 
@@ -198,24 +260,71 @@ class Brain(object):
 				return randphrase("exhausted",
 					"nevermind the whys and wherefores!") # placeholder
 				# TODO: first check reason. then... something?
+			elif tagged[0][0] == "how":
+				if tagged[2][0] == "you":
+					if " about " in sentence:
+						op = self._opinion(sentence.split(" about ")[1])
+						if op:
+							return op
+					if len(tagged) > 3 and tagged[3][0] in ["know", "determine", "ensure", "believe"]:
+						return "%s %s"%(randphrase("i don't"), sentence[4:])
+#					if tagged[3][0] in ["feel", "feeling", "doing", "been"]:
+					return self._feeling()
 			else: # when/why: yahoo answers api?
 				return randphrase("what")
 			q.put()
 		return random.choice(q.answers).get().content()
 
+	def _feeling(self):
+		if self.vibe == "happy":
+			return "%s %s"%(randfeel("happy"), randphrase("happy"))
+		if self.vibe == "grumpy":
+			grump = randphrase("grumpy")
+			if self.mood:
+				if self.mood["mad"] > self.mood["sad"]:
+					return "%s %s"%(grump, randfeel("mad"))
+				else:
+					return "%s %s"%(grump, randfeel("sad"))
+			return grump
+		if self.vibe == "inquisitive":
+			inq = randphrase("inquisitive")
+			if self.mood:
+				if self.mood["curiosity"] > self.mood["suspicion"]:
+					return "%s %s"%(randfeel("curiosity"), inq)
+				else:
+					return "%s %s"%(randfeel("suspicion"), inq)
+			return "%s %s"%(randphrase("who knows"), inq)
+		if self.mood:
+			if self.mood["energy"] > 0.6:
+				return randfeel("amped")
+			elif self.mood["energy"] < 0.4:
+				return randfeel("tired")
+		return randfeel("soso")
+
+	def _retort(self, sentence, responder):
+		v = retorts[responder](sentence, mood=self.mood)
+		if v:
+			v = v.replace(self.identity().name, "i")
+			return self._examiner and v.replace(self.examiner().name, "you") or v
+
 	def retort(self, sentence):
-		retz = MOODS[self.mood]
+		retz = VIBES[self.vibe]
 		random.shuffle(retz)
 		for r in retz:
-			v = retorts[r](sentence)
+			v = self._retort(sentence, r)
 			if v:
-				v = v.replace(self.identity().name, "i")
-				return self._examiner and v.replace(self.examiner().name, "you") or v
+				return v
 
 brains = {}
 
-def getBrain(name=None, mood="all", ear=False, retorts=True, fallback=False):
-	if name in brains:
-		return brains[name]
-	brains[name] = Brain(name, mood, ear, retorts, fallback)
+def getBrain(name=None, vibe="all", mood=None, options=None, ear=False):
+	if name not in brains:
+		brains[name] = Brain(name, vibe, mood, options, ear)
+	else:
+		if options:
+			brains[name].setOptions(options)
+		if mood:
+			brains[name].setMood(mood)
+		elif vibe:
+			brains[name].vibe = vibe
 	return brains[name]

@@ -218,7 +218,10 @@ class Brain(object):
 					pass # handle other verbs!!
 
 	def clarify(self, sentence):
-		return randphrase("what")
+		base = "%s ... %s"%(self._retort(sentence, "rephrase"), randphrase("what"))
+		if random.choice([True, False]):
+			return "%s %s"%(self._feeling(), base)
+		return base
 
 	def answer(self, sentence):
 		q = question(sentence)
@@ -240,7 +243,7 @@ class Brain(object):
 					return randphrase("exhausted",
 						"i don't know. who do you think you are?")
 				else:
-					return randphrase("what")
+					return self.clarify(sentence)
 			elif tagged[0][0] == "what":
 				if tagged[1][0] in ["is", "are"]:
 					if "your name" in sentence:
@@ -251,7 +254,7 @@ class Brain(object):
 						return "%s. what does %s mean to you?"%(randphrase("unsure"), obj.word)
 					q.answers.append(meanings[0].key)
 				else:
-					return randphrase("what")
+					return self.clarify(sentence)
 			elif tagged[0][0] == "where":
 				place = getPlace(nextNoun(tagged[2:]))
 				location = place.getLocation()
@@ -271,7 +274,7 @@ class Brain(object):
 #					if tagged[3][0] in ["feel", "feeling", "doing", "been"]:
 					return self._feeling()
 			else: # when/why: yahoo answers api?
-				return randphrase("what")
+				return self.clarify(sentence)
 			q.put()
 		return random.choice(q.answers).get().content()
 

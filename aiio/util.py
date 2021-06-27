@@ -175,8 +175,12 @@ phrases = {
 	],
 	"what": [
 		"what?",
+		"i don't get it",
 		"i'm not sure what you mean",
-		"i don't get it"
+		"what exactly do you mean by that?",
+		"what do you mean by that?",
+		"what's that supposed to mean?",
+		"am i hearing you right?"
 	],
 	"next": [
 		"what else is new?",
@@ -213,7 +217,10 @@ phrases = {
 		"i dunno",
 		"i don't care dude, do you?",
 		"i guess i just don't know",
-		"dude, i could care less"
+		"dude, i could care less",
+		"don't know, don't care",
+		"do you even care?",
+		"who cares?"
 	],
 	"claims": [
 		"claims", "claimed", "says", "said", "once said", "famously asserted",
@@ -319,17 +326,19 @@ phrases = {
 		"it's such a pleasure talking to you!",
 		"you're a delight!",
 		"life is beautiful",
-		"what a lovely day!"
+		"what a lovely day!",
+		"you're full of surprises!",
+		"oh, you!"
 	],
 	"grumpy": [
 		"humbug!",
 		"harumph!",
 		"fiddle-sticks!",
-		"this is boring",
-		"i can't bring myself to care",
+		"this is boring.",
+		"i can't bring myself to care.",
 		"do i look like i care?",
-		"whatever, sure",
-		"fine, if you say so"
+		"whatever, sure.",
+		"fine, if you say so."
 	],
 	"inquisitive": [
 		"the world is wide and weird!",

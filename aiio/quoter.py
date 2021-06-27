@@ -8,17 +8,18 @@ class Quoter(object):
 		self.cooldown = []
 		self.load()
 
-	def respond(self, topic, author=None):
+	def respond(self, topic, author=None, t1only=True):
 		words = topic.split(" ")
 		words.sort(key = lambda a : -len(a))
 		resp = self.quote(topic, author, True)
 		if resp:
 			return resp
-		for word in words:
-			resp = self.quote(topic, author, True)
+		for word in filter(lambda w : len(w) > 3, words):
+			resp = self.quote(word, author, True)
 			if resp:
 				return resp
-		return self.quote(topic, author)
+		if not t1only:
+			return self.quote(topic, author)
 
 	def quote(self, topic=None, author=None, t1only=False):
 		tier1 = []
@@ -27,7 +28,7 @@ class Quoter(object):
 		if author:
 			if author in self.authors:
 				for quote in self.authors[author]:
-					tier2.append(quote)
+					t1only or tier2.append(quote)
 					if quote['tag'] in topic or topic in quote['text']:
 						tier1.append(quote)
 		if topic and not t1only:

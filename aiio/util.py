@@ -153,12 +153,12 @@ phrases = {
 		"i'd rather discuss"
 	],
 	"rephrase": [
-		"so you're telling me that",
+		"so you're telling me",
 		"in other words,",
 		"so,",
 		"ok, so",
-		"it sounds like you're saying that",
-		"you're basically saying that"
+		"it sounds like you're saying",
+		"you're basically saying"
 	],
 	"inquire": [
 		"please elaborate on",

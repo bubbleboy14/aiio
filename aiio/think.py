@@ -127,7 +127,7 @@ def dsum(name):
 	return duckduckpy.query(name).abstract.replace("\n", " ")
 
 def summy(name):
-	return "%s %s"%(dsum(name), wsum(name))
+	return ("%s %s"%(dsum(name), wsum(name))).strip()
 
 def research(entity):
 	summary = summy(entity.name)

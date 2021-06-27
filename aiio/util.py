@@ -196,13 +196,13 @@ phrases = {
 	],
 	"exhausted": [
 		"how am i supposed to know?",
-		"i don't know anymore :(",
-		"you tell me"
+		"i don't even know anymore.",
+		"you tell me."
 	],
 	"agree": [
 		"exactly!",
 		"i completely agree.",
-		"you're preaching to the choir :)",
+		"you're preaching to the choir.",
 		"you've got my vote!"
 	],
 	"disagree": [

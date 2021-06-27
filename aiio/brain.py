@@ -57,6 +57,12 @@ class Brain(object):
 			self.ear = listen(self)
 
 	def __call__(self, sentence):
+		print("[INPUT]", sentence)
+		resp = self._process(sentence)
+		print("[OUTPUT]", resp)
+		return resp
+
+	def _process(self, sentence):
 		if sentence.startswith("*"):
 			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()

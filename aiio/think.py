@@ -212,13 +212,21 @@ def _invert(sentence): # reverse/retag 1st/2nd person
 				word = learn(word).conjugate(part)
 		elif word == "i":
 			word = "you"
+		elif word == "my":
+			word = "your"
+		elif word == "your":
+			word = "my"
+		elif word == "mine":
+			word = "yours"
+		elif word == "yours":
+			word = "mine"
 		elif part == "NN" and word == "you":
 			word = "i"
 		elif part == "PRP":
 			if word == "me":
 				word = "you"
 			elif word == "you":
-				word = (lastpart == "IN" and lastword != "that") and "me" or "i"
+				word = (lastpart == "IN" and lastword not in ["that", "than"]) and "me" or "i"
 		lastword = word
 		lastpart = part
 		tagged.append((word, part))

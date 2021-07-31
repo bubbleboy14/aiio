@@ -519,6 +519,17 @@ formalities = {
 			"apology accepted", "i can't stay mad at you", "that's ok", "just this once",
 			"i hope you mean it", "you should know better", "i've heard that before"
 		]
+	},
+	"upset": {
+		"triggers": [
+			"mad", "bad", "sad", "upset", "furious", "anxious", "worried"
+		],
+		"responses": [
+			"do you want to talk about it?", "i'm sorry to hear that", "that's rough",
+			"that sounds hard", "do you feel trapped?", "i'm sorry", "is there anything i can do?",
+			"i wish i could help", "it's ok to feel bad", "don't worry", "cheer up chum",
+			"you'll be ok", "you'll feel better soon", "we'll get through this"
+		]
 	}
 }
 

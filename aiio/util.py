@@ -487,7 +487,7 @@ formalities = {
 	"greetings": {
 		"triggers": [ # _also_ responses
 			"hello", "greetings", "salutations", "aloha", "well met", "hi there",
-			"oh, there you are!", "why hello", "hey there", "how are you?",
+			"oh, there you are!", "why hello", "hey there", "how are ya?",
 			"what's up?", "what's new?", "what's shakin?", "how's it going?"
 		]
 	},

@@ -395,6 +395,30 @@ phrases = {
 	"i am": [
 		"i am", "i'm", "my name is", "i go by", "they call me",
 		"you can call me", "my friends call me", "people call me"
+	],
+	"how else": [
+		"what else can i say?",
+		"what's not to get?",
+		"what does it sound like?",
+		"what do you think i mean?",
+		"did i stutter?",
+		"are you hard of hearing?",
+		"isn't it obvious?"
+	],
+	"just saying": [
+		"i said", "i'm saying", "i'm just saying",
+		"i was saying", "i was just saying",
+		"i mean", "i meant", "i just mean", "i just meant",
+		"i just think", "don't you think", "doesn't it seem like"
+	],
+	"no repeat": [
+		"don't make me repeat myself",
+		"how many times do i have to say it?",
+		"you're just not listening",
+		"it sounds like you don't want to understand",
+		"are you making fun of me?",
+		"this is boring",
+		"can we talk about something else?"
 	]
 }
 

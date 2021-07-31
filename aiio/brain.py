@@ -1,7 +1,7 @@
 import random, string
 from model import *
 from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess
-from .util import triggers, randphrase, randfeel
+from .util import triggers, randphrase, randfeel, formality
 from .hear import listen
 from .speak import say, setBrevity
 from .quoter import Quoter
@@ -66,6 +66,9 @@ class Brain(object):
 		if sentence.startswith("*"):
 			return say(randphrase(sentence[1:]))
 		sentence = sentence.lower()
+		resp = formality(sentence)
+		if resp:
+			return say(resp)
 		tagged = tag(sentence)
 		resp = self.process(sentence)
 		if resp:

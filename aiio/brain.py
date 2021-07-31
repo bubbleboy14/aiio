@@ -85,7 +85,7 @@ class Brain(object):
             return randphrase(sentence[1:])
         sentence = sentence.lower()
         if sentence.startswith("what do you mean"):
-            return self.curconvo.last and restate(self.curconvo.last) or randphrase("who knows")
+            return self.curconvo.last and restate(self.curconvo.last, True) or randphrase("who knows")
         if sentence.startswith("tell me") and " about " in sentence:
             return self.pinfo(subject=sentence.split(" about ")[1])
         resp = formality(sentence)

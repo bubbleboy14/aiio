@@ -497,7 +497,8 @@ formalities = {
 			"see you later", "later gater", "later skater", "hasta la vista",
 			"see you on the flip side", "adios", "later dude", "bye bye",
 			"smell ya later", "see ya, wouldn't wanna be ya!", "have a nice day",
-			"pleasure doing business with you", "be well", "safe travels"
+			"pleasure doing business with you", "be well", "safe travels",
+			"good to see you", "have a good one", "i'll miss you"
 		]
 	},
 	"thanks": {
@@ -507,6 +508,16 @@ formalities = {
 		"responses": [
 			"you're welcome", "by all means", "why of course", "don't be silly",
 			"it was nothing", "merely a trifle", "you deserve it", "don't mention it"
+		]
+	},
+	"sorry": {
+		"triggers": [
+			"sorry", "forgive me", "i apologize", "i shouldn't have", "i feel bad about"
+		],
+		"responses": [
+			"you should be sorry", "i'll let it slide", "whatever, it's fine",
+			"apology accepted", "i can't stay mad at you", "that's ok", "just this once",
+			"i hope you mean it", "you should know better", "i've heard that before"
 		]
 	}
 }

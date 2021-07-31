@@ -262,8 +262,11 @@ def _rephrase(sentence, tpos, opposite=False):
 			new.append(word)
 	return " ".join(new)
 
+def restate(sentence):
+	return _rephrase(_rephrase(sentence, "VB"), "NN")
+
 def rephrase(sentence, preface="rephrase", mood=None):
-	resp = "%s %s"%(randphrase(preface), invert(_rephrase(_rephrase(sentence, "VB"), "NN")))
+	resp = "%s %s"%(randphrase(preface), invert(restate(sentence)))
 	if mood and mood["vibe"] != "all":
 		resp = "%s ... %s"%(resp, randphrase(mood["vibe"]))
 	return resp

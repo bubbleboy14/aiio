@@ -161,7 +161,7 @@ def identify(name):
 	return person
 
 def tag(sentence):
-	return nltk.pos_tag(nltk.word_tokenize(sentence.replace("n't", " not")))
+	return nltk.pos_tag(nltk.word_tokenize(sentence.replace("can't", "can not").replace("n't", " not")))
 
 def nextNoun(tagged, force=True):
 	noun = []
@@ -262,8 +262,15 @@ def _rephrase(sentence, tpos, opposite=False):
 			new.append(word)
 	return " ".join(new)
 
-def restate(sentence):
-	return _rephrase(_rephrase(_rephrase(_rephrase(sentence, "VB"), "NN"), "JJ"), "VBG")
+def restate(sentence, force=False):
+	s = _rephrase(_rephrase(_rephrase(_rephrase(sentence, "VB"), "NN"), "JJ"), "VBG")
+	if force and s == sentence:
+		return random.choice([
+			"%s %s"%(randphrase("just saying"), s),
+			"%s - %s"%(s, randphrase("how else")),
+			randphrase("no repeat")
+		])
+	return s
 
 def rephrase(sentence, preface="rephrase", mood=None):
 	resp = "%s %s"%(randphrase(preface), invert(restate(sentence)))
@@ -286,14 +293,18 @@ negz = {
 	" aren't ": " are ",
 	" weren't ": " were ",
 	" don't ": " do ",
-	" doesn't ": " does "
+	" doesn't ": " does ",
+	" can't ": " can ",
+	" won't ": " will "
 }
 posz = {
 	" is ": " isn't ",
 	" are ": " aren't ",
 	" were ": " weren't ",
 	" do ": " don't ",
-	" does ": " doesn't "
+	" does ": " doesn't ",
+	" can ": " can't ",
+	" will ": " won't "
 }
 
 def negate(sentence):

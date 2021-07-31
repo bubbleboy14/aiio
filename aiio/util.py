@@ -483,6 +483,41 @@ feelings = {
 	]
 }
 
+formalities = {
+	"greetings": {
+		"triggers": [ # _also_ responses
+			"hello", "greetings", "salutations", "aloha", "well met", "hi there",
+			"oh, there you are!", "why hello", "hey there", "how are you?",
+			"what's up?", "what's new?", "what's shakin?", "how's it going?"
+		]
+	},
+	"farewell": {
+		"triggers": [ # _also_ responses
+			"goodbye", "farewell", "toodaloo", "nice knowing you",
+			"see you later", "later gater", "later skater", "hasta la vista",
+			"see you on the flip side", "adios", "later dude", "bye bye",
+			"smell ya later", "see ya, wouldn't wanna be ya!", "have a nice day",
+			"pleasure doing business with you", "be well", "safe travels"
+		]
+	},
+	"thanks": {
+		"triggers": [
+			"thanks", "thank you", "i appreciate", "you shouldn't have"
+		],
+		"responses": [
+			"you're welcome", "by all means", "why of course", "don't be silly",
+			"it was nothing", "merely a trifle", "you deserve it", "don't mention it"
+		]
+	}
+}
+
+def formality(prompt):
+	for form, conf in formalities.items():
+		tz = conf["triggers"]
+		for t in tz:
+			if t in prompt:
+				return random.choice(conf.get("responses", tz))
+
 def randfeel(ftype):
 	return random.choice(feelings[ftype])
 

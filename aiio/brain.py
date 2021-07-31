@@ -252,7 +252,7 @@ class Brain(object):
             if tagged[0][0] == "who":
                 if tagged[1][0] in ["is", "are"]:
                     if tagged[2][0] == "you":
-                        return "i'm %s"%(self.identity().name,)
+                        return "%s %s"%(randphrase("i am"), self.curconvo.name)
                     else:
                         q.answers.append(identify(nextNoun(tagged[2:])).key)
                 elif tagged[1][0] == "am":

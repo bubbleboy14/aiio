@@ -268,7 +268,8 @@ class Brain(object):
                     meanings = obj.meanings()
                     if not meanings:
                         return "%s. what does %s mean to you?"%(randphrase("unsure"), obj.word)
-                    q.answers.append(meanings[0].key)
+                    for meaning in meanings:
+                        q.answers.append(meaning.key)
                 else:
                     return self.clarify(sentence)
             elif tagged[0][0] == "where":
@@ -289,6 +290,9 @@ class Brain(object):
                         return "%s %s"%(randphrase("i don't"), sentence[4:])
 #                   if tagged[3][0] in ["feel", "feeling", "doing", "been"]:
                     return self._feeling()
+                if tagged[1][0] == "old":
+                    return randphrase("no time")
+                return randphrase("who knows")
             else: # when/why: yahoo answers api?
                 return self.clarify(sentence)
             q.put()

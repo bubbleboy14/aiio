@@ -263,7 +263,7 @@ def _rephrase(sentence, tpos, opposite=False):
 	return " ".join(new)
 
 def restate(sentence):
-	return _rephrase(_rephrase(sentence, "VB"), "NN")
+	return _rephrase(_rephrase(_rephrase(_rephrase(sentence, "VB"), "NN"), "JJ"), "VBG")
 
 def rephrase(sentence, preface="rephrase", mood=None):
 	resp = "%s %s"%(randphrase(preface), invert(restate(sentence)))

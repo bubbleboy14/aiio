@@ -14,4 +14,4 @@ ingestion -> relations
  - use this technique to process data (from wikipedia etc)
 convo: batch speech commands (to avoid crashes)
 aiio auto-install necessary nltk corpa (already set up?)
-deps: swig, libpulse-dev, libasound2-dev
+deps: dict, swig, libpulse-dev, libasound2-dev

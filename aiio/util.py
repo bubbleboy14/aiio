@@ -378,6 +378,19 @@ phrases = {
 		"i never said that was the case.",
 		"i don't.",
 		"i wouldn't know."
+	],
+	"no time": [
+		"time is an illusion",
+		"age is just a number",
+		"how old do you think i am?",
+		"how old are you?",
+		"how old is anyone?",
+		"i don't keep track",
+		"i live in the moment",
+		"you can't tell?",
+		"i lost track",
+		"i stopped counting",
+		"does it matter?"
 	]
 }
 

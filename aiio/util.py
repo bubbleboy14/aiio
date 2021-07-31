@@ -391,6 +391,10 @@ phrases = {
 		"i lost track",
 		"i stopped counting",
 		"does it matter?"
+	],
+	"i am": [
+		"i am", "i'm", "my name is", "i go by", "they call me",
+		"you can call me", "my friends call me", "people call me"
 	]
 }
 

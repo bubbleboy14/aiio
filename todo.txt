@@ -5,6 +5,7 @@ constructed responses:
 improved handling of i/you info
 complex clause comprehension
 answer
+ - where -> reactivate geo stuff!!   <------
  - why -- check Reason (invert sentence...) then ask?
  - when -- ask? (yahoo answers api? seems broken.)
  - duckduckgo api???

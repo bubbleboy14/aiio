@@ -378,6 +378,19 @@ phrases = {
 		"i never said that was the case.",
 		"i don't.",
 		"i wouldn't know."
+	],
+	"no time": [
+		"time is an illusion",
+		"age is just a number",
+		"how old do you think i am?",
+		"how old are you?",
+		"how old is anyone?",
+		"i don't keep track",
+		"i live in the moment",
+		"you can't tell?",
+		"i lost track",
+		"i stopped counting",
+		"does it matter?"
 	]
 }
 
@@ -487,7 +500,7 @@ formalities = {
 	"greetings": {
 		"triggers": [ # _also_ responses
 			"hello", "greetings", "salutations", "aloha", "well met", "hi there",
-			"oh, there you are!", "why hello", "hey there", "how are you?",
+			"oh, there you are!", "why hello", "hey there", "how are ya?",
 			"what's up?", "what's new?", "what's shakin?", "how's it going?"
 		]
 	},

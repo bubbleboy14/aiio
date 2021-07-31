@@ -35,7 +35,8 @@ inquisitive : curiosity + suspicion
 """
 
 class Conversation(object):
-    def __init__(self, partner):
+    def __init__(self, name, partner):
+        self.name = name
         self.partner = partner
         self.topics = []
         self.last = None
@@ -63,14 +64,18 @@ class Brain(object):
         if ear:
             self.ear = listen(self)
 
-    def _convo(self, partner):
-        if partner not in self.conversations:
-            self.conversations[partner] = Conversation(partner)
-        return self.conversations[partner]
+    def _convo(self, name, partner):
+        # multiple personalities w/ the same _identity_ may be distinguished by their individual _names_
+        if name not in self.conversations:
+            self.conversations[name] = {}
+        if partner not in self.conversations[name]:
+            self.conversations[name][partner] = Conversation(name, partner)
+        return self.conversations[name][partner]
 
-    def __call__(self, sentence, asker="rando"):
+    def __call__(self, sentence, name=None, asker="rando"):
+        name = name or self.name
         print("[INPUT]", sentence)
-        self.curconvo = self._convo(asker)
+        self.curconvo = self._convo(name, asker)
         self.curconvo.last = resp = say(self._process(sentence))
         print("[OUTPUT]", resp)
         return resp

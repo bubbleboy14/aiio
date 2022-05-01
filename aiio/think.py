@@ -297,13 +297,13 @@ def support(sentence, mood=None):
 			randphrase(mood["ego"] > mood["happy"] and "boast" or "compliment"))
 	return resp
 
-def query2statement(query):
-	tagged = tag(query)
+def query2statement(query, tagged=None):
+	tagged = tagged or tag(query)
 	noun = nextNoun(tagged, pros=True)
 	return invert("%s %s"%(noun, query[4:].replace(" %s"%(noun,), "")))
 
-def tellmewhy(query):
-	statement = query2statement(query)
+def tellmewhy(query, tagged=None):
+	statement = query2statement(query, tagged)
 	return Reason.query(Reason.name == statement).all()
 
 negz = {

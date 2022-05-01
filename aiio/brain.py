@@ -227,8 +227,7 @@ class Brain(object):
             elif "because" in sentence:
                 event, reason = sentence.split(" because ")
                 Reason(person=self._examiner, name=event, reason=phrase(reason)).put()
-                return "%s %s because %s?"%(randphrase("rephrase"),
-                    event, reason)
+                return "%s %s?"%(randphrase("rephrase"), sentence)
             elif tagged[0][1].startswith("NN"):
                 if tagged[1][0] in ["is", "are"]: # learn it!
                     mdef = " ".join([w for (w, p) in tagged[2:]])

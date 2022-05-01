@@ -273,14 +273,18 @@ class Action(Object):
 class Emotion(Idea):
     emotion = db.ForeignKey(kind=Word)
 
-class Reason(Object): # why
+class Reason(Object): # why > [name : 'the sky is blue']
     person = db.ForeignKey(kind=Person)
-    reason = db.ForeignKey(kind=Phrase)
+    reason = db.ForeignKey(kind=Phrase) # the atmosphere refracts light
 
-    def content(self):
-        if self.person:
-            return "%s says %s because %s"%(self.person.name, self.name, self.reason.content())
-        return "%s because %s"%(self.name, self.reason.content())
+    def content(self, speaker=None):
+        per = self.person and self.person.get()
+        statement = "%s because %s"%(self.name, self.reason.get().content())
+        if speaker and speaker == per:
+            return statement
+        if per:
+            return "%s %s %s"%(per.name, util.randphrase("claims"), statement)
+        return "%s that %s"%(util.randphrase("anottribute"), statement)
 
 class Method(Action): # how
     action = db.ForeignKey(kind=Action)
@@ -300,4 +304,4 @@ class Opinion(db.TimeStampedBase):
 
 class Question(db.TimeStampedBase):
     phrase = db.ForeignKey(kind=Phrase) # who what when where why how
-    answers = db.ForeignKey(kinds=[Word, Phrase, Idea, Meaning, Object, Person], repeated=True)
+    answers = db.ForeignKey(kinds=[Word, Phrase, Idea, Meaning, Object, Person, Reason], repeated=True)

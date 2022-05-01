@@ -1,6 +1,6 @@
 import random, string
 from model import *
-from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess, restate
+from .think import learn, phrase, meaning, question, identify, find_opinions, tag, nextNoun, retorts, assess, restate, tellmewhy
 from .util import triggers, randphrase, randfeel, formality
 from .hear import listen
 from .speak import say, setBrevity
@@ -92,7 +92,7 @@ class Brain(object):
         if resp:
             return resp
         tagged = tag(sentence)
-        if tagged[0][1] in ["WP", "WRB"]:
+        if tagged[0][1] in ["WP", "WRB"]: # account for "why" prefixes > "tell me...", "i'd like to know..."
             return self.answer(sentence)
         return self.process(sentence) or self.ingest(sentence) or self.options["fallback"] and self.fallback()
 
@@ -282,9 +282,13 @@ class Brain(object):
                 location = place.getLocation()
                 return location.name
             elif tagged[0][0] == "why":
-                return randphrase("exhausted",
-                    "nevermind the whys and wherefores!") # placeholder
-                # TODO: first check reason. then... something?
+                reasons = tellmewhy(sentence, tagged)
+                if reasons:
+                    for reason in reasons:
+                        q.answers.append(reason.key)
+                else:
+                    return randphrase("exhausted",
+                        "nevermind the whys and wherefores!")
             elif tagged[0][0] == "how":
                 if tagged[2][0] == "you":
                     if " about " in sentence:
@@ -301,7 +305,8 @@ class Brain(object):
             else: # when/why: yahoo answers api?
                 return self.clarify(sentence)
             q.put()
-        return random.choice(q.answers).get().content()
+        ans = random.choice(q.answers).get()
+        return ans.polytype == "reason" and ans.content(self.identity()) or ans.content()
 
     def _feeling(self):
         if self.vibe == "happy":

@@ -163,11 +163,20 @@ def identify(name):
 def tag(sentence):
 	return nltk.pos_tag(nltk.word_tokenize(sentence.replace("can't", "can not").replace("n't", " not")))
 
-def nextNoun(tagged, force=True):
-	noun = []
+def verbs(tagged):
+	vz = []
 	for t in tagged:
-		if t[1].startswith("NN") or t[1] == "JJ":
+		if t[1].startswith("VB"):
+			vz.append(t)
+	return vz
+
+def nextNoun(tagged, force=True, pros=False):
+	noun = []
+	lastPart = None
+	for t in tagged:
+		if t[1].startswith("NN") or t[1] == "JJ" or (pros and t[1] == "PRP"):
 			noun.append(t[0])
+			lastPart = t[1]
 		elif noun:
 			break
 	if force and not noun:
@@ -176,6 +185,8 @@ def nextNoun(tagged, force=True):
 				break
 			else:
 				noun.append(t[0])
+	if len(noun) > 1 and lastPart == "JJ":
+		noun.pop()
 	return " ".join(noun)
 
 def inquire(sentence, mood=None): # only return if word is unknown or mood{}
@@ -285,6 +296,15 @@ def support(sentence, mood=None):
 		resp = "%s ... %s"%(resp,
 			randphrase(mood["ego"] > mood["happy"] and "boast" or "compliment"))
 	return resp
+
+def query2statement(query):
+	tagged = tag(query)
+	noun = nextNoun(tagged, pros=True)
+	return invert("%s %s"%(noun, query[4:].replace(" %s"%(noun,), "")))
+
+def tellmewhy(query):
+	statement = query2statement(query)
+	return Reason.query(Reason.name == statement).all()
 
 negz = {
 	" no ": "",

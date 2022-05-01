@@ -222,6 +222,10 @@ phrases = {
 		"do you even care?",
 		"who cares?"
 	],
+	"anottribute": [
+		"some say", "i've heard", "people say", "a little bird told me",
+		"it's been said", "i've heard it said", "i've heard tell"
+	],
 	"claims": [
 		"claims", "claimed", "says", "said", "once said", "famously asserted",
 		"believes", "believed", "thinks", "thought", "was sure",

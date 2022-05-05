@@ -88,13 +88,13 @@ class Brain(object):
             return self.curconvo.last and restate(self.curconvo.last, True) or randphrase("who knows")
         if sentence.startswith("tell me") and " about " in sentence:
             return self.pinfo(subject=sentence.split(" about ")[1])
-        resp = formality(sentence)
+        resp = formality(sentence) or self.process(sentence)
         if resp:
             return resp
         tagged = tag(sentence)
         if tagged[0][1] in ["WP", "WRB"]: # account for "why" prefixes > "tell me...", "i'd like to know..."
             return self.answer(sentence)
-        return self.process(sentence) or self.ingest(sentence) or self.options["fallback"] and self.fallback()
+        return self.ingest(sentence) or self.options["fallback"] and self.fallback()
 
     def setMood(self, mood, upvibe=True):
         self.mood = mood

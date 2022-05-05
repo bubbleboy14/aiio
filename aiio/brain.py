@@ -86,11 +86,11 @@ class Brain(object):
         sentence = sentence.lower()
         if sentence.startswith("what do you mean"):
             return self.curconvo.last and restate(self.curconvo.last, True) or randphrase("who knows")
-        if sentence.startswith("tell me") and " about " in sentence:
-            return self.pinfo(subject=sentence.split(" about ")[1])
         resp = formality(sentence) or self.process(sentence)
         if resp:
             return resp
+        if sentence.startswith("tell me") and " about " in sentence:
+            return self.pinfo(subject=sentence.split(" about ")[1])
         tagged = tag(sentence)
         if tagged[0][1] in ["WP", "WRB"]: # account for "why" prefixes > "tell me...", "i'd like to know..."
             return self.answer(sentence)

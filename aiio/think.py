@@ -138,6 +138,12 @@ def research(entity):
 	else:
 		print("thing.research() FAILED for", entity)
 
+def add_opinions(person, lines):
+	puts = []
+	for line in lines:
+		puts.append(Opinion(person=person.key, phrase=phrase(line).key))
+	db.put_multi(puts)
+
 def find_opinions(person):
 	res = fetch("en.wikiquote.org",
 		"/w/api.php?format=json&action=parse&page=%s&prop=text"%("_".join(person.name.split(" ")),),
@@ -146,10 +152,7 @@ def find_opinions(person):
 		draw = strip_html(res['parse']['text']['*'])
 		dlines = filter(lambda x: len(x) > 30,
 			[d.split("\n\n")[0] for d in draw.split("\n\n\n\n\n")])
-		puts = []
-		for dline in dlines:
-			puts.append(Opinion(person=person.key, phrase=phrase(dline).key))
-		db.put_multi(puts)
+		add_opinions(person, dlines)
 
 def identify(name):
 	print("identify", name)

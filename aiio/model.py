@@ -202,6 +202,13 @@ class Person(Object): # who
     birth = db.ForeignKey(kind=Event)
     residence = db.ForeignKey(kind=Place)
 
+    def add_opinions(self, lines):
+        from .think import phrase
+        puts = []
+        for line in lines:
+            puts.append(Opinion(person=self.key, phrase=phrase(line).key))
+        db.put_multi(puts)
+
     def dline(self):
         return random.choice(self.description.split(". "))
 

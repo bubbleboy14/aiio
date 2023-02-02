@@ -1,22 +1,39 @@
 import os
-from cantools.util import read, write, log
+from cantools.util import read, write, log, batch
 from .think import identify, add_opinions
 from model import Opinion
 
-def opinionate(data):
+UNBRAK = False
+
+def blocks2sentences(blocks):
 	ops = []
-	blocks = data.split("\n\n")
 	for block in blocks:
 		sentences = block.split(". ")
 		for sentence in sentences:
 			sent = sentence.replace("\n", " ").replace("  ", " ").replace("_", "").strip()
 			if sent.startswith("[") or len(sent) < 25:
 				continue
-			while "[" in sent:
-				s = sent.find("[")
-				e = sent.find("]", s)
-				sent = sent[:s] + sent[e+1:]
+			if UNBRAK:
+				while "[" in sent:
+					s = sent.find("[")
+					e = sent.find("]", s)
+					sent = sent[:s] + sent[e+1:]
 			ops.append(sent)
+	return ops
+
+def opinionate(data):
+	blocks = data.split("\n\n")
+	blen = len(blocks)
+	ops = []
+	progress = 0
+	def sentencer(bset):
+		nonlocal progress
+		progress += len(bset)
+		ops.extend(blocks2sentences(bset))
+		log("processed %s of %s blocks"%(progress, blen))
+		log("compiled %s opinions"%(len(ops),))
+	log("processing %s blocks"%(blen,), important=True)
+	batch(blocks, sentencer, chunk=100)
 	log("uniquifying %s statements"%(len(ops),), 1)
 	ops = list(set(ops))
 	log("derived %s opinions"%(len(ops),), 1)

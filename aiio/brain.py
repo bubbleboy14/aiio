@@ -340,6 +340,8 @@ class Brain(object):
             return self._examiner and v.replace(self.examiner().name, "you") or v
 
     def retort(self, sentence):
+        if random.randint(0, 4): # deflect
+            return randphrase("deflect")
         retz = VIBES[self.vibe]
         random.shuffle(retz)
         for r in retz:

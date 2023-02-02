@@ -4,7 +4,7 @@ try: # py2
 except: # py3
 	from subprocess import getoutput
 from cantools.web import fetch, strip_html
-from cantools.util import log, error
+from cantools.util import log, error, batch
 from . import speak
 from model import *
 from .util import randphrase, values
@@ -139,10 +139,15 @@ def research(entity):
 		print("thing.research() FAILED for", entity)
 
 def add_opinions(person, lines):
-	puts = []
-	for line in lines:
-		puts.append(Opinion(person=person.key, phrase=phrase(line).key))
-	db.put_multi(puts)
+	numlines = len(lines)
+	progress = 0
+	def addops(ops):
+		nonlocal progress
+		progress += len(ops)
+		person.add_opinions(ops)
+		print("imported", progress, "of", numlines, "opinions")
+	print("adding", numlines, "opinions")
+	batch(lines, addops)
 
 def find_opinions(person):
 	res = fetch("en.wikiquote.org",

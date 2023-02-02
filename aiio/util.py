@@ -1,20 +1,28 @@
 import random
 
+opleads = [
+	"what do you think of",
+	"what do you think about",
+	"what do you know about",
+	"what can you tell me about",
+	"what are your thoughts on",
+	"what's your take on",
+	"how do you feel about",
+	"what's your opinion of",
+	"have you heard about",
+	"have you heard of",
+	"have you considered",
+	"can you tell me about",
+	"tell me about",
+	"what about"
+]
+eprefs = ["do you", "you must", "i bet you", "surely you", "you probably"]
+for emotion in ["love", "like", "know about", "dislike", "hate"]:
+	for pref in eprefs:
+		opleads.append("%s %s"%(pref, emotion))
+
 triggers = {
-	"opinion": [
-		"what do you think of",
-		"what do you think about",
-		"what do you know about",
-		"what can you tell me about",
-		"what are your thoughts on",
-		"what's your take on",
-		"how do you feel about",
-		"what's your opinion of",
-		"have you heard about",
-		"have you heard of",
-		"what about",
-		"do you like"
-	]
+	"opinion": opleads
 }
 
 aspects = {
@@ -423,6 +431,21 @@ phrases = {
 		"are you making fun of me?",
 		"this is boring",
 		"can we talk about something else?"
+	],
+	"deflect": [
+		"you tell me",
+		"what do you think?",
+		"what's your opinion?"
+		"well what do you think?",
+		"what are your thoughts?",
+		"i already know how i feel",
+		"how do you feel about it?",
+		"it's hard to say how i feel",
+		"please tell me how you feel",
+		"i'd like to hear your opinion",
+		"i'd like to hear your thoughts",
+		"i don't know, what do you think?",
+		"i'm not sure, what do you feel about it?"
 	]
 }
 

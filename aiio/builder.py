@@ -4,6 +4,8 @@ from .think import identify, add_opinions
 from model import Opinion
 
 UNBRAK = False
+FILTER = True
+fcz = ["^", "*", "®"]
 
 def blocks2sentences(blocks):
 	ops = []
@@ -22,6 +24,9 @@ def blocks2sentences(blocks):
 	return ops
 
 def opinionate(data):
+	if FILTER:
+		for fc in fcz:
+			data = data.replace(fc, "")
 	blocks = data.split("\n\n")
 	blen = len(blocks)
 	ops = []

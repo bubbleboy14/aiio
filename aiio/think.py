@@ -155,8 +155,8 @@ def find_opinions(person):
 		protocol="https", asjson=True)
 	if res and 'parse' in res:
 		draw = strip_html(res['parse']['text']['*'])
-		dlines = filter(lambda x: len(x) > 30,
-			[d.split("\n\n")[0] for d in draw.split("\n\n\n\n\n")])
+		dlines = list(filter(lambda x: len(x) > 30,
+			[d.split("\n\n")[0] for d in draw.split("\n\n\n\n\n")]))
 		add_opinions(person, dlines)
 
 def identify(name):

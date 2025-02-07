@@ -2,6 +2,7 @@ import random, nltk
 from . import speak, iverbs, util
 from cantools import db, geo
 
+NEUTRALS = ["a", "an", "the"] # better list?
 POS = { "JJ": "adj", "VB": "v", "NN": "n" }
 IRR = {
     "be": {
@@ -242,9 +243,10 @@ class Person(Object): # who
             tz = topic.split(" ")
             tz.sort(key = lambda a : -len(a))
             for part in tz:
-                op = self.opinion(stem(part, True))
-                if op:
-                    return op
+                if part not in NEUTRALS:
+                    op = self.opinion(stem(part, True))
+                    if op:
+                        return op
 
     # version 1 (current): use util words directly
     # version 2 (future) : check synonyms/forms

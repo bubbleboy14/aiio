@@ -14,7 +14,7 @@ def load_corpora():
 		nltk.download(item)
 
 load_corpora()
-ddgs = DDGS()
+ddgs = duckduckgo_search.DDGS()
 
 _padding = "\n\n  %s\n      "
 

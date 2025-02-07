@@ -129,7 +129,7 @@ def dsum(name):
 	return res and res[0]['body']
 
 def summy(name):
-	return dsum(name) or wsum(name)
+	return wsum(name) or dsum(name)
 #	return ("%s %s"%(dsum(name), wsum(name))).strip()
 
 def research(entity):

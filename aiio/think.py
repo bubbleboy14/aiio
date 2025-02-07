@@ -1,4 +1,4 @@
-import random, nltk, duckduckpy, wikipedia
+import random, nltk, duckduckgo_search, wikipedia
 try: # py2
 	from commands import getoutput
 except: # py3
@@ -14,6 +14,7 @@ def load_corpora():
 		nltk.download(item)
 
 load_corpora()
+ddgs = DDGS()
 
 _padding = "\n\n  %s\n      "
 
@@ -124,10 +125,12 @@ def wsum(name):
 
 def dsum(name):
 	print("checking duckduckgo for", name)
-	return duckduckpy.query(name).abstract.replace("\n", " ")
+	res = ddgs.text(name, max_results=1)
+	return res and res[0]['body']
 
 def summy(name):
-	return ("%s %s"%(dsum(name), wsum(name))).strip()
+	return dsum(name) or wsum(name)
+#	return ("%s %s"%(dsum(name), wsum(name))).strip()
 
 def research(entity):
 	summary = summy(entity.name)

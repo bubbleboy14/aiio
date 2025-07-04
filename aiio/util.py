@@ -27,7 +27,7 @@ triggers = {
 
 aspects = {
 	"creations": [
-		"responsible for", # maybe remove later?
+		"was responsible for", # maybe remove later?
 		"started",
 		"oversaw",
 		"initiated",
@@ -36,13 +36,16 @@ aspects = {
 		"directed"
 	],
 	"opinions": [
-		"felt", "thought", "believed"
+		"felt", "thought", "believed", "was sure",
+		"was of the opinion", "happened to think"
 	],
 	"attractions": [
-		"liked", "loved", "appreciated", "enjoyed"
+		"liked", "loved", "appreciated", "enjoyed",
+		"was quite fond of", "delighted in", "was partial to"
 	],
 	"aversions": [
-		"disliked", "hated"
+		"disliked", "hated", "abhorred", "detested",
+		"never liked", "didn't love", "wasn't fond of"
 	]
 }
 
@@ -124,6 +127,8 @@ phrases = {
 	"leave": [
 		"leaving me already?",
 		"where are you going?",
+		"won't you stay?",
+		"don't leave me!",
 		"come back!"
 	],
 	"good": [
@@ -132,7 +137,8 @@ phrases = {
 		"heck yeah!",
 		"awesome."
 		"sounds good to me!",
-		"that's fantastic!"
+		"that's fantastic!",
+		"music to my ears!"
 	],
 	"bad": [
 		"how sad.",
@@ -143,7 +149,9 @@ phrases = {
 		"that's rough.",
 		"pretty evil, right?",
 		"yikes.",
-		"gross."
+		"gross.",
+		"that's just tragic.",
+		"i'm overwhelmed."
 	],
 	"greeting": [
 		"salutations,",
@@ -205,6 +213,7 @@ phrases = {
 	"exhausted": [
 		"how am i supposed to know?",
 		"i don't even know anymore.",
+		"this is overwhelming.",
 		"you tell me."
 	],
 	"agree": [
@@ -267,17 +276,20 @@ phrases = {
 		"you make me sick",
 		"you're disgusting",
 		"you idiot!",
+		"you're nasty!",
 		"you should be ashamed"
 	],
 	"chastise": [
 		"why would you say something like that?",
 		"what's wrong with you?",
 		"how could you think that?",
-		"you're embarrassing yourself"
+		"you're embarrassing yourself",
+		"keep your stupid comments in your pocket!"
 	],
 	"doubt": [
 		"are you sure?",
 		"that can't be right",
+		"well that doesn't sound right",
 		"i don't think that's the case",
 		"i doubt it",
 		"i highly doubt it",
@@ -303,6 +315,7 @@ phrases = {
 		"sure, and i'm the queen of england!"
 	],
 	"lament": [
+		"why me?",
 		"no one gets me",
 		"it's like i'm talking to a wall",
 		"another sad conversation",
@@ -315,16 +328,21 @@ phrases = {
 		"how intriguing!",
 		"i wonder...",
 		"what a strange mystery...",
-		"so many possibilities!"
+		"so many possibilities!",
+		"how magical!",
+		"could it be?"
 	],
 	"wonder": [
 		"could it be that",
 		"is it possible that",
 		"i wonder if",
 		"so you think that",
-		"are you saying that"
+		"are you saying that",
+		"is there any possibility that",
+		"maybe"
 	],
 	"challenge": [
+		"i highly doubt that",
 		"there's no way that",
 		"i can't believe that",
 		"you're wrong to say that"
@@ -332,6 +350,8 @@ phrases = {
 	"accuse": [
 		"that's a laugh coming from you!",
 		"look in the mirror, you jerk!",
+		"sounds like your fault to me!",
+		"thanks a lot!",
 		"i blame you"
 	],
 	"happy": [
@@ -340,6 +360,8 @@ phrases = {
 		"life is beautiful",
 		"what a lovely day!",
 		"you're full of surprises!",
+		"how wonderful!",
+		"i like you",
 		"oh, you!"
 	],
 	"grumpy": [
@@ -360,12 +382,14 @@ phrases = {
 		"interesting point!",
 		"really makes ya wonder!",
 		"is that all there is to it?",
+		"how very curious!",
 		"i can't help but wonder if there's more to it..."
 	],
 	"who knows": [
 		"who knows?",
 		"who can say?",
 		"who can tell?",
+		"don't ask me!",
 		"no one knows!",
 		"only god knows.",
 		"how can we be sure?",
@@ -389,6 +413,8 @@ phrases = {
 		"i never claimed to.",
 		"i never said that was the case.",
 		"i don't.",
+		"nope.",
+		"not me.",
 		"i wouldn't know."
 	],
 	"no time": [
@@ -430,6 +456,7 @@ phrases = {
 		"it sounds like you don't want to understand",
 		"are you making fun of me?",
 		"this is boring",
+		"please change the subject",
 		"can we talk about something else?"
 	],
 	"deflect": [

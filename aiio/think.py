@@ -1,8 +1,5 @@
 import random, nltk, duckduckgo_search, wikipedia
-try: # py2
-	from commands import getoutput
-except: # py3
-	from subprocess import getoutput
+from subprocess import getoutput
 from cantools.web import fetch, strip_html
 from cantools.util import log, error, batch
 from . import speak

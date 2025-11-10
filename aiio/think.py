@@ -1,6 +1,7 @@
 import random, nltk, duckduckgo_search, wikipedia
 from subprocess import getoutput
-from cantools.web import fetch, strip_html
+from cantools.web import fetch
+from cantools.web.util import strip_html
 from cantools.util import log, error, batch
 from . import speak
 from model import *
